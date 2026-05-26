@@ -21,14 +21,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/stevenvelozo/pict-renderer-graph.git"
+		"url": "git+https://github.com/fable-retold/pict-renderer-graph.git"
 	},
 	"author": "steven velozo <steven@velozo.com>",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/stevenvelozo/pict-renderer-graph/issues"
+		"url": "https://github.com/fable-retold/pict-renderer-graph/issues"
 	},
-	"homepage": "https://github.com/stevenvelozo/pict-renderer-graph#readme",
+	"homepage": "https://github.com/fable-retold/pict-renderer-graph#readme",
 	"devDependencies": {
 		"chai": "^4.5.0",
 		"mocha": "^10.4.0",

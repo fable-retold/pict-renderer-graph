@@ -32,7 +32,7 @@ const libCoalescer       = require('./cache/Pict-Renderer-Graph-Coalescer.js');
 const { RendererBusyError } = require('./Pict-Renderer-Graph-Errors.js');
 const _DefaultConfiguration = require('./Pict-Renderer-Graph-DefaultConfiguration.js');
 
-const _NS_URI = 'https://stevenvelozo.github.io/pict-renderer-graph/ns/v1';
+const _NS_URI = 'https://fable-retold.github.io/pict-renderer-graph/ns/v1';
 
 class PictRendererGraph extends libFableServiceProviderBase
 {

@@ -219,7 +219,7 @@ Every rendered SVG carries two metadata blocks:
 <metadata>
   <!-- payload-type:application/vnd.excalidraw+json -->
   <!-- payload-start --> ...base64... <!-- payload-end -->
-  <pict-renderer-graph:source xmlns:pict-renderer-graph="https://stevenvelozo.github.io/pict-renderer-graph/ns/v1">
+  <pict-renderer-graph:source xmlns:pict-renderer-graph="https://fable-retold.github.io/pict-renderer-graph/ns/v1">
     <![CDATA[ { "type": "flow", "nodes": [...], "edges": [...] } ]]>
   </pict-renderer-graph:source>
 </metadata>
