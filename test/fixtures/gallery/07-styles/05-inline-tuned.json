@@ -1,0 +1,28 @@
+{
+	"_description": "Inline-tuned style: notebook base with custom palette + seed.",
+	"type": "flow",
+	"title": "style: inline-tuned",
+	"style": {
+		"name": "notebook",
+		"Roughness": 2,
+		"StrokeWidth": 3,
+		"FontSize": 22,
+		"Palette": {
+			"ink":   "#0A0A0A",
+			"accent":"#FF4B33",
+			"link":  "#1B8A6B"
+		},
+		"RandomSeedSalt": 777
+	},
+	"nodes": [
+		{ "id": "a", "label": "Plan", "kind": "ellipse" },
+		{ "id": "b", "label": "Build", "kind": "rectangle" },
+		{ "id": "c", "label": "Ship", "kind": "rectangle", "accent": "accent" },
+		{ "id": "d", "label": "Iterate", "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "a", "to": "b" },
+		{ "from": "b", "to": "c", "label": "yes" },
+		{ "from": "c", "to": "d", "label": "feedback", "kind": "dashed" }
+	]
+}

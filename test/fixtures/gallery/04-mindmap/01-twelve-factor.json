@@ -1,0 +1,35 @@
+{
+	"_description": "Twelve-Factor App methodology, organized as a mind map.",
+	"type": "mindmap",
+	"title": "twelve-factor app",
+	"root": "root",
+	"nodes": [
+		{ "id": "root",  "label": "12 Factor",  "kind": "ellipse", "accent": "accent" },
+		{ "id": "code",  "label": "Codebase",   "kind": "ellipse" },
+		{ "id": "deps",  "label": "Dependencies","kind": "ellipse" },
+		{ "id": "cfg",   "label": "Config",     "kind": "ellipse" },
+		{ "id": "bs",    "label": "Backing\nServices","kind": "ellipse" },
+		{ "id": "br",    "label": "Build /\nRun","kind": "ellipse" },
+		{ "id": "proc",  "label": "Processes",  "kind": "ellipse" },
+		{ "id": "port",  "label": "Port\nBinding","kind": "ellipse" },
+		{ "id": "conc",  "label": "Concurrency","kind": "ellipse" },
+		{ "id": "dispo", "label": "Disposability","kind": "ellipse" },
+		{ "id": "parity","label": "Dev/Prod\nParity","kind": "ellipse" },
+		{ "id": "logs",  "label": "Logs",       "kind": "ellipse" },
+		{ "id": "admin", "label": "Admin\nProcesses","kind": "ellipse" }
+	],
+	"edges": [
+		{ "from": "root", "to": "code" },
+		{ "from": "root", "to": "deps" },
+		{ "from": "root", "to": "cfg" },
+		{ "from": "root", "to": "bs" },
+		{ "from": "root", "to": "br" },
+		{ "from": "root", "to": "proc" },
+		{ "from": "root", "to": "port" },
+		{ "from": "root", "to": "conc" },
+		{ "from": "root", "to": "dispo" },
+		{ "from": "root", "to": "parity" },
+		{ "from": "root", "to": "logs" },
+		{ "from": "root", "to": "admin" }
+	]
+}

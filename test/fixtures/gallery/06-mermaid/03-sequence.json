@@ -1,0 +1,6 @@
+{
+	"_description": "Mermaid sequence diagram — exercises mermaid's autonumbering + activations.",
+	"type": "mermaid",
+	"title": "mermaid sequence",
+	"mermaid": "sequenceDiagram\n    Alice->>Bob: Hello Bob, how are you?\n    Bob-->>John: How about you John?\n    Bob--x Alice: I am good thanks!\n    Bob-x John: I am good thanks!\n    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.\n    Bob-->Alice: Checking with John...\n    Alice->John: Yes... John, how are you?"
+}

@@ -1,0 +1,2860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pict-renderer-graph gallery</title>
+<style>
+
+		* { box-sizing: border-box; }
+		body { margin: 0; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #FAF8F4; color: #2A2520; }
+		h1 { margin: 0 0 4px 0; font-weight: 700; font-size: 1.5rem; }
+		.subtitle { color: #8A7F72; font-size: 0.85rem; margin-bottom: 28px; }
+		.subtitle code { background: #F0E8DA; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+		h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.08em; color: #5A4A3C; margin-top: 32px; margin-bottom: 12px; border-bottom: 1px solid #D4C4A8; padding-bottom: 4px; }
+		.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+		.card { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+		.card-name { padding: 10px 12px; background: #F4EEE2; font-family: 'SFMono-Regular', 'SF Mono', Menlo, monospace; font-size: 0.78rem; font-weight: 600; color: #3D3229; border-bottom: 1px solid #D4C4A8; }
+		.card-image { padding: 12px; background: #FBF7EE; text-align: center; min-height: 200px; display: flex; align-items: center; justify-content: center; }
+		.card-image img { max-width: 100%; max-height: 320px; object-fit: contain; }
+		.card-image.error { color: #B43B3B; font-style: italic; font-size: 0.85rem; }
+		.card-meta { padding: 8px 12px; font-size: 0.72rem; color: #8A7F72; display: flex; gap: 12px; flex-wrap: wrap; border-top: 1px solid #E8E1D2; background: #FBF7EE; }
+		.card-meta strong { color: #5A4A3C; font-weight: 600; }
+		.card-meta a { color: #2E7D74; text-decoration: none; }
+		.card-meta a:hover { text-decoration: underline; }
+		details { padding: 8px 12px; border-top: 1px solid #E8E1D2; font-size: 0.72rem; }
+		details summary { cursor: pointer; color: #5A4A3C; }
+		details pre { font-family: 'SFMono-Regular', monospace; font-size: 0.72rem; background: #F8F4E9; padding: 10px; border-radius: 4px; margin: 8px 0 0; overflow: auto; max-height: 240px; white-space: pre-wrap; word-break: break-word; }
+		.failed { background: #FBE3DC; border-color: #E8B2A0; }
+		.failed .card-name { background: #F5C6B6; color: #8C2E1A; }
+		.stats { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; padding: 16px; margin-bottom: 24px; font-size: 0.85rem; }
+		.stats span { display: inline-block; margin-right: 18px; }
+		.stats strong { color: #3D3229; }
+	
+</style>
+</head>
+<body>
+<h1>pict-renderer-graph — gallery</h1>
+<div class="subtitle">Visual catalog of fixtures rendered by the pict-renderer-graph service. Regenerate with <code>npm run test:gallery</code>.</div>
+<div class="stats">
+<span>Total fixtures: <strong>36</strong></span>
+<span>Rendered: <strong>36</strong></span>
+<span>Failed: <strong>0</strong></span>
+<span>Total render time: <strong>4314 ms</strong></span>
+<span>Generated: <strong>2026-05-25T19:38:06.929Z</strong></span>
+</div>
+<h2>flow (5)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-three-tier-web-app</div>
+<div class="card-image">
+<a href="01-flow/01-three-tier-web-app.png" target="_blank"><img src="01-flow/01-three-tier-web-app.png" alt="01-three-tier-web-app"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 26</span>
+<span><strong>render:</strong> 303ms</span>
+<span><a href="01-flow/01-three-tier-web-app.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Classic three-tier web app: User → CDN/LB → web → API → DB, with cache off to the side.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Classic three-tier web app: User → CDN/LB → web → API → DB, with cache off to the side.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;three-tier web app&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;User&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;cdn&quot;,
+      &quot;label&quot;: &quot;CDN&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;lb&quot;,
+      &quot;label&quot;: &quot;Load\nBalancer&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;web&quot;,
+      &quot;label&quot;: &quot;Web Server&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;api&quot;,
+      &quot;label&quot;: &quot;API&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;cache&quot;,
+      &quot;label&quot;: &quot;Cache&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    },
+    {
+      &quot;id&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;Database&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;cdn&quot;,
+      &quot;label&quot;: &quot;static&quot;
+    },
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;lb&quot;,
+      &quot;label&quot;: &quot;dynamic&quot;
+    },
+    {
+      &quot;from&quot;: &quot;lb&quot;,
+      &quot;to&quot;: &quot;web&quot;
+    },
+    {
+      &quot;from&quot;: &quot;web&quot;,
+      &quot;to&quot;: &quot;api&quot;,
+      &quot;label&quot;: &quot;REST&quot;
+    },
+    {
+      &quot;from&quot;: &quot;api&quot;,
+      &quot;to&quot;: &quot;cache&quot;,
+      &quot;label&quot;: &quot;lookup&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    },
+    {
+      &quot;from&quot;: &quot;api&quot;,
+      &quot;to&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;query&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-microservices</div>
+<div class="card-image">
+<a href="01-flow/02-microservices.png" target="_blank"><img src="01-flow/02-microservices.png" alt="02-microservices"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 35</span>
+<span><strong>render:</strong> 156ms</span>
+<span><a href="01-flow/02-microservices.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Microservice mesh: API gateway routing to 5 specialized services, each with its own datastore.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Microservice mesh: API gateway routing to 5 specialized services, each with its own datastore.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;microservices&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;client&quot;,
+      &quot;label&quot;: &quot;Client&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;gw&quot;,
+      &quot;label&quot;: &quot;API Gateway&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;Auth Service&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;User Service&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;order&quot;,
+      &quot;label&quot;: &quot;Order Service&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;pay&quot;,
+      &quot;label&quot;: &quot;Payment Service&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;notify&quot;,
+      &quot;label&quot;: &quot;Notification\nService&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;udb&quot;,
+      &quot;label&quot;: &quot;Users DB&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;odb&quot;,
+      &quot;label&quot;: &quot;Orders DB&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;queue&quot;,
+      &quot;label&quot;: &quot;Message Queue&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;client&quot;,
+      &quot;to&quot;: &quot;gw&quot;,
+      &quot;label&quot;: &quot;request&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;verify&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;user&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;order&quot;
+    },
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;udb&quot;
+    },
+    {
+      &quot;from&quot;: &quot;order&quot;,
+      &quot;to&quot;: &quot;odb&quot;
+    },
+    {
+      &quot;from&quot;: &quot;order&quot;,
+      &quot;to&quot;: &quot;pay&quot;,
+      &quot;label&quot;: &quot;charge&quot;
+    },
+    {
+      &quot;from&quot;: &quot;order&quot;,
+      &quot;to&quot;: &quot;queue&quot;,
+      &quot;label&quot;: &quot;publish&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    },
+    {
+      &quot;from&quot;: &quot;queue&quot;,
+      &quot;to&quot;: &quot;notify&quot;,
+      &quot;label&quot;: &quot;consume&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-cicd-pipeline</div>
+<div class="card-image">
+<a href="01-flow/03-cicd-pipeline.png" target="_blank"><img src="01-flow/03-cicd-pipeline.png" alt="03-cicd-pipeline"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 28</span>
+<span><strong>render:</strong> 115ms</span>
+<span><a href="01-flow/03-cicd-pipeline.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>CI/CD pipeline: source → build → test → staging → prod, with rollback path.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;CI/CD pipeline: source → build → test → staging → prod, with rollback path.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;CI/CD pipeline&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;src&quot;,
+      &quot;label&quot;: &quot;git push&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;build&quot;,
+      &quot;label&quot;: &quot;build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;unit&quot;,
+      &quot;label&quot;: &quot;unit tests&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;e2e&quot;,
+      &quot;label&quot;: &quot;e2e tests&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;stage&quot;,
+      &quot;label&quot;: &quot;staging deploy&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;smoke&quot;,
+      &quot;label&quot;: &quot;smoke tests&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;prod&quot;,
+      &quot;label&quot;: &quot;production&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;back&quot;,
+      &quot;label&quot;: &quot;rollback&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;src&quot;,
+      &quot;to&quot;: &quot;build&quot;
+    },
+    {
+      &quot;from&quot;: &quot;build&quot;,
+      &quot;to&quot;: &quot;unit&quot;,
+      &quot;label&quot;: &quot;pass&quot;
+    },
+    {
+      &quot;from&quot;: &quot;unit&quot;,
+      &quot;to&quot;: &quot;e2e&quot;,
+      &quot;label&quot;: &quot;pass&quot;
+    },
+    {
+      &quot;from&quot;: &quot;e2e&quot;,
+      &quot;to&quot;: &quot;stage&quot;
+    },
+    {
+      &quot;from&quot;: &quot;stage&quot;,
+      &quot;to&quot;: &quot;smoke&quot;
+    },
+    {
+      &quot;from&quot;: &quot;smoke&quot;,
+      &quot;to&quot;: &quot;prod&quot;,
+      &quot;label&quot;: &quot;approve&quot;
+    },
+    {
+      &quot;from&quot;: &quot;prod&quot;,
+      &quot;to&quot;: &quot;back&quot;,
+      &quot;label&quot;: &quot;if broken&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">04-etl-pipeline</div>
+<div class="card-image">
+<a href="01-flow/04-etl-pipeline.png" target="_blank"><img src="01-flow/04-etl-pipeline.png" alt="04-etl-pipeline"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 25</span>
+<span><strong>render:</strong> 113ms</span>
+<span><a href="01-flow/04-etl-pipeline.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>ETL data pipeline from multiple sources into a data warehouse.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;ETL data pipeline from multiple sources into a data warehouse.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;ETL pipeline&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;s1&quot;,
+      &quot;label&quot;: &quot;PostgreSQL&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s2&quot;,
+      &quot;label&quot;: &quot;MongoDB&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s3&quot;,
+      &quot;label&quot;: &quot;S3 logs&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;extract&quot;,
+      &quot;label&quot;: &quot;Extract&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;trans&quot;,
+      &quot;label&quot;: &quot;Transform\n(dbt)&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;load&quot;,
+      &quot;label&quot;: &quot;Load&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;wh&quot;,
+      &quot;label&quot;: &quot;Snowflake\nwarehouse&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;bi&quot;,
+      &quot;label&quot;: &quot;Looker / BI&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;s1&quot;,
+      &quot;to&quot;: &quot;extract&quot;
+    },
+    {
+      &quot;from&quot;: &quot;s2&quot;,
+      &quot;to&quot;: &quot;extract&quot;
+    },
+    {
+      &quot;from&quot;: &quot;s3&quot;,
+      &quot;to&quot;: &quot;extract&quot;
+    },
+    {
+      &quot;from&quot;: &quot;extract&quot;,
+      &quot;to&quot;: &quot;trans&quot;
+    },
+    {
+      &quot;from&quot;: &quot;trans&quot;,
+      &quot;to&quot;: &quot;load&quot;
+    },
+    {
+      &quot;from&quot;: &quot;load&quot;,
+      &quot;to&quot;: &quot;wh&quot;
+    },
+    {
+      &quot;from&quot;: &quot;wh&quot;,
+      &quot;to&quot;: &quot;bi&quot;,
+      &quot;label&quot;: &quot;query&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">05-decision-tree</div>
+<div class="card-image">
+<a href="01-flow/05-decision-tree.png" target="_blank"><img src="01-flow/05-decision-tree.png" alt="05-decision-tree"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 25</span>
+<span><strong>render:</strong> 145ms</span>
+<span><a href="01-flow/05-decision-tree.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Decision-tree flow with diamond gates: a deployability check.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Decision-tree flow with diamond gates: a deployability check.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;should i ship?&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;start&quot;,
+      &quot;label&quot;: &quot;ready?&quot;,
+      &quot;kind&quot;: &quot;diamond&quot;
+    },
+    {
+      &quot;id&quot;: &quot;tests&quot;,
+      &quot;label&quot;: &quot;tests pass?&quot;,
+      &quot;kind&quot;: &quot;diamond&quot;
+    },
+    {
+      &quot;id&quot;: &quot;ci&quot;,
+      &quot;label&quot;: &quot;CI green?&quot;,
+      &quot;kind&quot;: &quot;diamond&quot;
+    },
+    {
+      &quot;id&quot;: &quot;ship&quot;,
+      &quot;label&quot;: &quot;ship it&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;wait&quot;,
+      &quot;label&quot;: &quot;fix + retry&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    },
+    {
+      &quot;id&quot;: &quot;back&quot;,
+      &quot;label&quot;: &quot;rollback plan&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;start&quot;,
+      &quot;to&quot;: &quot;tests&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;tests&quot;,
+      &quot;to&quot;: &quot;ci&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;tests&quot;,
+      &quot;to&quot;: &quot;wait&quot;,
+      &quot;label&quot;: &quot;no&quot;
+    },
+    {
+      &quot;from&quot;: &quot;ci&quot;,
+      &quot;to&quot;: &quot;ship&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;ci&quot;,
+      &quot;to&quot;: &quot;wait&quot;,
+      &quot;label&quot;: &quot;no&quot;
+    },
+    {
+      &quot;from&quot;: &quot;ship&quot;,
+      &quot;to&quot;: &quot;back&quot;,
+      &quot;label&quot;: &quot;and&quot;,
+      &quot;kind&quot;: &quot;dotted&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>star (3)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-pub-sub</div>
+<div class="card-image">
+<a href="02-star/01-pub-sub.png" target="_blank"><img src="02-star/01-pub-sub.png" alt="01-pub-sub"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> star</span>
+<span><strong>elements:</strong> 21</span>
+<span><strong>render:</strong> 123ms</span>
+<span><a href="02-star/01-pub-sub.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Publisher → topic → many subscribers (classic broadcast pattern).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Publisher → topic → many subscribers (classic broadcast pattern).&quot;,
+  &quot;type&quot;: &quot;star&quot;,
+  &quot;title&quot;: &quot;pub/sub fanout&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;topic&quot;,
+      &quot;label&quot;: &quot;Topic&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s1&quot;,
+      &quot;label&quot;: &quot;Inventory&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s2&quot;,
+      &quot;label&quot;: &quot;Pricing&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s3&quot;,
+      &quot;label&quot;: &quot;Email\nNotifier&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s4&quot;,
+      &quot;label&quot;: &quot;Analytics&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s5&quot;,
+      &quot;label&quot;: &quot;Audit Log&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s6&quot;,
+      &quot;label&quot;: &quot;Webhook\nDispatcher&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s1&quot;
+    },
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s2&quot;
+    },
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s3&quot;
+    },
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s4&quot;
+    },
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s5&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    },
+    {
+      &quot;from&quot;: &quot;topic&quot;,
+      &quot;to&quot;: &quot;s6&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-star-schema</div>
+<div class="card-image">
+<a href="02-star/02-star-schema.png" target="_blank"><img src="02-star/02-star-schema.png" alt="02-star-schema"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> star</span>
+<span><strong>elements:</strong> 23</span>
+<span><strong>render:</strong> 108ms</span>
+<span><a href="02-star/02-star-schema.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Data warehouse star schema: fact table at center, dimension tables on spokes.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Data warehouse star schema: fact table at center, dimension tables on spokes.&quot;,
+  &quot;type&quot;: &quot;star&quot;,
+  &quot;title&quot;: &quot;sales star schema&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;fact&quot;,
+      &quot;label&quot;: &quot;Fact:\nSales&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;date&quot;,
+      &quot;label&quot;: &quot;Dim:\nDate&quot;
+    },
+    {
+      &quot;id&quot;: &quot;prod&quot;,
+      &quot;label&quot;: &quot;Dim:\nProduct&quot;
+    },
+    {
+      &quot;id&quot;: &quot;cust&quot;,
+      &quot;label&quot;: &quot;Dim:\nCustomer&quot;
+    },
+    {
+      &quot;id&quot;: &quot;store&quot;,
+      &quot;label&quot;: &quot;Dim:\nStore&quot;
+    },
+    {
+      &quot;id&quot;: &quot;promo&quot;,
+      &quot;label&quot;: &quot;Dim:\nPromotion&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;fact&quot;,
+      &quot;to&quot;: &quot;date&quot;,
+      &quot;label&quot;: &quot;FK&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fact&quot;,
+      &quot;to&quot;: &quot;prod&quot;,
+      &quot;label&quot;: &quot;FK&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fact&quot;,
+      &quot;to&quot;: &quot;cust&quot;,
+      &quot;label&quot;: &quot;FK&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fact&quot;,
+      &quot;to&quot;: &quot;store&quot;,
+      &quot;label&quot;: &quot;FK&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fact&quot;,
+      &quot;to&quot;: &quot;promo&quot;,
+      &quot;label&quot;: &quot;FK&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-service-mesh</div>
+<div class="card-image">
+<a href="02-star/03-service-mesh.png" target="_blank"><img src="02-star/03-service-mesh.png" alt="03-service-mesh"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> star</span>
+<span><strong>elements:</strong> 31</span>
+<span><strong>render:</strong> 110ms</span>
+<span><a href="02-star/03-service-mesh.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Service mesh: API gateway routing to many microservices.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Service mesh: API gateway routing to many microservices.&quot;,
+  &quot;type&quot;: &quot;star&quot;,
+  &quot;title&quot;: &quot;service mesh&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;gw&quot;,
+      &quot;label&quot;: &quot;API\nGateway&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;auth&quot;
+    },
+    {
+      &quot;id&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;users&quot;
+    },
+    {
+      &quot;id&quot;: &quot;ord&quot;,
+      &quot;label&quot;: &quot;orders&quot;
+    },
+    {
+      &quot;id&quot;: &quot;pay&quot;,
+      &quot;label&quot;: &quot;payments&quot;
+    },
+    {
+      &quot;id&quot;: &quot;inv&quot;,
+      &quot;label&quot;: &quot;inventory&quot;
+    },
+    {
+      &quot;id&quot;: &quot;sh&quot;,
+      &quot;label&quot;: &quot;shipping&quot;
+    },
+    {
+      &quot;id&quot;: &quot;rev&quot;,
+      &quot;label&quot;: &quot;reviews&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;/auth&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;/users&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;ord&quot;,
+      &quot;label&quot;: &quot;/orders&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;pay&quot;,
+      &quot;label&quot;: &quot;/payments&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;inv&quot;,
+      &quot;label&quot;: &quot;/inventory&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;sh&quot;,
+      &quot;label&quot;: &quot;/shipping&quot;
+    },
+    {
+      &quot;from&quot;: &quot;gw&quot;,
+      &quot;to&quot;: &quot;rev&quot;,
+      &quot;label&quot;: &quot;/reviews&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>sequence (4)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-oauth2-authcode</div>
+<div class="card-image">
+<a href="03-sequence/01-oauth2-authcode.png" target="_blank"><img src="03-sequence/01-oauth2-authcode.png" alt="01-oauth2-authcode"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> sequence</span>
+<span><strong>elements:</strong> 31</span>
+<span><strong>render:</strong> 139ms</span>
+<span><a href="03-sequence/01-oauth2-authcode.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>OAuth 2.0 authorization-code flow (RFC 6749 §4.1). The canonical web-app sign-in handshake.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;OAuth 2.0 authorization-code flow (RFC 6749 §4.1). The canonical web-app sign-in handshake.&quot;,
+  &quot;type&quot;: &quot;sequence&quot;,
+  &quot;title&quot;: &quot;OAuth 2.0 authorization code&quot;,
+  &quot;actors&quot;: [
+    {
+      &quot;id&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;User&quot;
+    },
+    {
+      &quot;id&quot;: &quot;app&quot;,
+      &quot;label&quot;: &quot;Client App&quot;
+    },
+    {
+      &quot;id&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;Auth Server&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;rs&quot;,
+      &quot;label&quot;: &quot;Resource\nServer&quot;
+    }
+  ],
+  &quot;messages&quot;: [
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;app&quot;,
+      &quot;label&quot;: &quot;click &#39;sign in&#39;&quot;
+    },
+    {
+      &quot;from&quot;: &quot;app&quot;,
+      &quot;to&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;GET /authorize&quot;
+    },
+    {
+      &quot;from&quot;: &quot;auth&quot;,
+      &quot;to&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;login + consent&quot;
+    },
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;approve&quot;
+    },
+    {
+      &quot;from&quot;: &quot;auth&quot;,
+      &quot;to&quot;: &quot;app&quot;,
+      &quot;label&quot;: &quot;redirect ?code=…&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;app&quot;,
+      &quot;to&quot;: &quot;auth&quot;,
+      &quot;label&quot;: &quot;POST /token (code)&quot;
+    },
+    {
+      &quot;from&quot;: &quot;auth&quot;,
+      &quot;to&quot;: &quot;app&quot;,
+      &quot;label&quot;: &quot;access_token&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;app&quot;,
+      &quot;to&quot;: &quot;rs&quot;,
+      &quot;label&quot;: &quot;GET /resource\n(Bearer token)&quot;
+    },
+    {
+      &quot;from&quot;: &quot;rs&quot;,
+      &quot;to&quot;: &quot;app&quot;,
+      &quot;label&quot;: &quot;resource&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-tcp-handshake</div>
+<div class="card-image">
+<a href="03-sequence/02-tcp-handshake.png" target="_blank"><img src="03-sequence/02-tcp-handshake.png" alt="02-tcp-handshake"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> sequence</span>
+<span><strong>elements:</strong> 13</span>
+<span><strong>render:</strong> 77ms</span>
+<span><a href="03-sequence/02-tcp-handshake.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>TCP three-way handshake (RFC 793).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;TCP three-way handshake (RFC 793).&quot;,
+  &quot;type&quot;: &quot;sequence&quot;,
+  &quot;title&quot;: &quot;TCP handshake&quot;,
+  &quot;actors&quot;: [
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Client&quot;
+    },
+    {
+      &quot;id&quot;: &quot;s&quot;,
+      &quot;label&quot;: &quot;Server&quot;
+    }
+  ],
+  &quot;messages&quot;: [
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;s&quot;,
+      &quot;label&quot;: &quot;SYN (seq=x)&quot;
+    },
+    {
+      &quot;from&quot;: &quot;s&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;SYN+ACK (seq=y, ack=x+1)&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;s&quot;,
+      &quot;label&quot;: &quot;ACK (ack=y+1)&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-rest-crud</div>
+<div class="card-image">
+<a href="03-sequence/03-rest-crud.png" target="_blank"><img src="03-sequence/03-rest-crud.png" alt="03-rest-crud"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> sequence</span>
+<span><strong>elements:</strong> 26</span>
+<span><strong>render:</strong> 95ms</span>
+<span><a href="03-sequence/03-rest-crud.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Classic REST CRUD sequence: client → API → DB.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Classic REST CRUD sequence: client → API → DB.&quot;,
+  &quot;type&quot;: &quot;sequence&quot;,
+  &quot;title&quot;: &quot;REST CRUD&quot;,
+  &quot;actors&quot;: [
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Client&quot;
+    },
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;API&quot;
+    },
+    {
+      &quot;id&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;Database&quot;
+    }
+  ],
+  &quot;messages&quot;: [
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;POST /widgets&quot;
+    },
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;INSERT&quot;
+    },
+    {
+      &quot;from&quot;: &quot;db&quot;,
+      &quot;to&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;id=42&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;201 Created&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;GET /widgets/42&quot;
+    },
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;SELECT&quot;
+    },
+    {
+      &quot;from&quot;: &quot;db&quot;,
+      &quot;to&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;row&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;200 OK&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">04-saga-pattern</div>
+<div class="card-image">
+<a href="03-sequence/04-saga-pattern.png" target="_blank"><img src="03-sequence/04-saga-pattern.png" alt="04-saga-pattern"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> sequence</span>
+<span><strong>elements:</strong> 36</span>
+<span><strong>render:</strong> 126ms</span>
+<span><a href="03-sequence/04-saga-pattern.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Saga pattern with compensating transactions on failure.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Saga pattern with compensating transactions on failure.&quot;,
+  &quot;type&quot;: &quot;sequence&quot;,
+  &quot;title&quot;: &quot;saga (book trip)&quot;,
+  &quot;actors&quot;: [
+    {
+      &quot;id&quot;: &quot;client&quot;,
+      &quot;label&quot;: &quot;Client&quot;
+    },
+    {
+      &quot;id&quot;: &quot;orch&quot;,
+      &quot;label&quot;: &quot;Orchestrator&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;flight&quot;,
+      &quot;label&quot;: &quot;Flight&quot;
+    },
+    {
+      &quot;id&quot;: &quot;hotel&quot;,
+      &quot;label&quot;: &quot;Hotel&quot;
+    },
+    {
+      &quot;id&quot;: &quot;car&quot;,
+      &quot;label&quot;: &quot;Car Rental&quot;
+    }
+  ],
+  &quot;messages&quot;: [
+    {
+      &quot;from&quot;: &quot;client&quot;,
+      &quot;to&quot;: &quot;orch&quot;,
+      &quot;label&quot;: &quot;book trip&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;flight&quot;,
+      &quot;label&quot;: &quot;reserve&quot;
+    },
+    {
+      &quot;from&quot;: &quot;flight&quot;,
+      &quot;to&quot;: &quot;orch&quot;,
+      &quot;label&quot;: &quot;ok&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;hotel&quot;,
+      &quot;label&quot;: &quot;reserve&quot;
+    },
+    {
+      &quot;from&quot;: &quot;hotel&quot;,
+      &quot;to&quot;: &quot;orch&quot;,
+      &quot;label&quot;: &quot;ok&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;car&quot;,
+      &quot;label&quot;: &quot;reserve&quot;
+    },
+    {
+      &quot;from&quot;: &quot;car&quot;,
+      &quot;to&quot;: &quot;orch&quot;,
+      &quot;label&quot;: &quot;FAIL&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;hotel&quot;,
+      &quot;label&quot;: &quot;compensate\n(cancel)&quot;,
+      &quot;kind&quot;: &quot;async&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;flight&quot;,
+      &quot;label&quot;: &quot;compensate\n(cancel)&quot;,
+      &quot;kind&quot;: &quot;async&quot;
+    },
+    {
+      &quot;from&quot;: &quot;orch&quot;,
+      &quot;to&quot;: &quot;client&quot;,
+      &quot;label&quot;: &quot;rolled back&quot;,
+      &quot;kind&quot;: &quot;return&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>mindmap (2)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-twelve-factor</div>
+<div class="card-image">
+<a href="04-mindmap/01-twelve-factor.png" target="_blank"><img src="04-mindmap/01-twelve-factor.png" alt="01-twelve-factor"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mindmap</span>
+<span><strong>elements:</strong> 39</span>
+<span><strong>render:</strong> 100ms</span>
+<span><a href="04-mindmap/01-twelve-factor.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Twelve-Factor App methodology, organized as a mind map.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Twelve-Factor App methodology, organized as a mind map.&quot;,
+  &quot;type&quot;: &quot;mindmap&quot;,
+  &quot;title&quot;: &quot;twelve-factor app&quot;,
+  &quot;root&quot;: &quot;root&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;root&quot;,
+      &quot;label&quot;: &quot;12 Factor&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;code&quot;,
+      &quot;label&quot;: &quot;Codebase&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;deps&quot;,
+      &quot;label&quot;: &quot;Dependencies&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;cfg&quot;,
+      &quot;label&quot;: &quot;Config&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;bs&quot;,
+      &quot;label&quot;: &quot;Backing\nServices&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;br&quot;,
+      &quot;label&quot;: &quot;Build /\nRun&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;proc&quot;,
+      &quot;label&quot;: &quot;Processes&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;port&quot;,
+      &quot;label&quot;: &quot;Port\nBinding&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;conc&quot;,
+      &quot;label&quot;: &quot;Concurrency&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;dispo&quot;,
+      &quot;label&quot;: &quot;Disposability&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;parity&quot;,
+      &quot;label&quot;: &quot;Dev/Prod\nParity&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;logs&quot;,
+      &quot;label&quot;: &quot;Logs&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;admin&quot;,
+      &quot;label&quot;: &quot;Admin\nProcesses&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;code&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;deps&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;cfg&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;bs&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;br&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;proc&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;port&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;conc&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;dispo&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;parity&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;logs&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;admin&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-web-stack</div>
+<div class="card-image">
+<a href="04-mindmap/02-web-stack.png" target="_blank"><img src="04-mindmap/02-web-stack.png" alt="02-web-stack"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mindmap</span>
+<span><strong>elements:</strong> 48</span>
+<span><strong>render:</strong> 106ms</span>
+<span><a href="04-mindmap/02-web-stack.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Web stack mind map — frontend, backend, infra branches.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Web stack mind map — frontend, backend, infra branches.&quot;,
+  &quot;type&quot;: &quot;mindmap&quot;,
+  &quot;title&quot;: &quot;web stack&quot;,
+  &quot;root&quot;: &quot;root&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;root&quot;,
+      &quot;label&quot;: &quot;Web App&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;fe&quot;,
+      &quot;label&quot;: &quot;Frontend&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;be&quot;,
+      &quot;label&quot;: &quot;Backend&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;db&quot;,
+      &quot;label&quot;: &quot;Database&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;ops&quot;,
+      &quot;label&quot;: &quot;DevOps&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;react&quot;,
+      &quot;label&quot;: &quot;React&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;vue&quot;,
+      &quot;label&quot;: &quot;Vue&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;svelte&quot;,
+      &quot;label&quot;: &quot;Svelte&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;node&quot;,
+      &quot;label&quot;: &quot;Node.js&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;go&quot;,
+      &quot;label&quot;: &quot;Go&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;rust&quot;,
+      &quot;label&quot;: &quot;Rust&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;pg&quot;,
+      &quot;label&quot;: &quot;Postgres&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;mongo&quot;,
+      &quot;label&quot;: &quot;Mongo&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;redis&quot;,
+      &quot;label&quot;: &quot;Redis&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;docker&quot;,
+      &quot;label&quot;: &quot;Docker&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;k8s&quot;,
+      &quot;label&quot;: &quot;K8s&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;fe&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;be&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;db&quot;
+    },
+    {
+      &quot;from&quot;: &quot;root&quot;,
+      &quot;to&quot;: &quot;ops&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fe&quot;,
+      &quot;to&quot;: &quot;react&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fe&quot;,
+      &quot;to&quot;: &quot;vue&quot;
+    },
+    {
+      &quot;from&quot;: &quot;fe&quot;,
+      &quot;to&quot;: &quot;svelte&quot;
+    },
+    {
+      &quot;from&quot;: &quot;be&quot;,
+      &quot;to&quot;: &quot;node&quot;
+    },
+    {
+      &quot;from&quot;: &quot;be&quot;,
+      &quot;to&quot;: &quot;go&quot;
+    },
+    {
+      &quot;from&quot;: &quot;be&quot;,
+      &quot;to&quot;: &quot;rust&quot;
+    },
+    {
+      &quot;from&quot;: &quot;db&quot;,
+      &quot;to&quot;: &quot;pg&quot;
+    },
+    {
+      &quot;from&quot;: &quot;db&quot;,
+      &quot;to&quot;: &quot;mongo&quot;
+    },
+    {
+      &quot;from&quot;: &quot;db&quot;,
+      &quot;to&quot;: &quot;redis&quot;
+    },
+    {
+      &quot;from&quot;: &quot;ops&quot;,
+      &quot;to&quot;: &quot;docker&quot;
+    },
+    {
+      &quot;from&quot;: &quot;ops&quot;,
+      &quot;to&quot;: &quot;k8s&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>datadict (3)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-blog</div>
+<div class="card-image">
+<a href="05-datadict/01-blog.png" target="_blank"><img src="05-datadict/01-blog.png" alt="01-blog"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> datadict</span>
+<span><strong>elements:</strong> 44</span>
+<span><strong>render:</strong> 118ms</span>
+<span><a href="05-datadict/01-blog.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>A blogging-platform ER diagram: users, posts, comments, tags.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;A blogging-platform ER diagram: users, posts, comments, tags.&quot;,
+  &quot;type&quot;: &quot;datadict&quot;,
+  &quot;title&quot;: &quot;blog ER&quot;,
+  &quot;entities&quot;: [
+    {
+      &quot;id&quot;: &quot;users&quot;,
+      &quot;label&quot;: &quot;users&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;email&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;name&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;created_at&quot;,
+          &quot;type&quot;: &quot;timestamp&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;posts&quot;,
+      &quot;label&quot;: &quot;posts&quot;,
+      &quot;accent&quot;: &quot;accent&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;author_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;title&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;body&quot;,
+          &quot;type&quot;: &quot;text&quot;
+        },
+        {
+          &quot;name&quot;: &quot;published_at&quot;,
+          &quot;type&quot;: &quot;timestamp&quot;,
+          &quot;nullable&quot;: true
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;comments&quot;,
+      &quot;label&quot;: &quot;comments&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;post_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;author_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;body&quot;,
+          &quot;type&quot;: &quot;text&quot;
+        },
+        {
+          &quot;name&quot;: &quot;created_at&quot;,
+          &quot;type&quot;: &quot;timestamp&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;tags&quot;,
+      &quot;label&quot;: &quot;tags&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;name&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;post_tags&quot;,
+      &quot;label&quot;: &quot;post_tags&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;post_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;tag_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        }
+      ]
+    }
+  ],
+  &quot;relations&quot;: [
+    {
+      &quot;from&quot;: &quot;posts.author_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;wrote&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;comments.post_id&quot;,
+      &quot;to&quot;: &quot;posts.id&quot;,
+      &quot;label&quot;: &quot;on&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;comments.author_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;by&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;post_tags.post_id&quot;,
+      &quot;to&quot;: &quot;posts.id&quot;,
+      &quot;label&quot;: &quot;tags&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;post_tags.tag_id&quot;,
+      &quot;to&quot;: &quot;tags.id&quot;,
+      &quot;label&quot;: &quot;tagged-by&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-ecommerce</div>
+<div class="card-image">
+<a href="05-datadict/02-ecommerce.png" target="_blank"><img src="05-datadict/02-ecommerce.png" alt="02-ecommerce"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> datadict</span>
+<span><strong>elements:</strong> 47</span>
+<span><strong>render:</strong> 90ms</span>
+<span><a href="05-datadict/02-ecommerce.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>E-commerce schema — customers, orders, products, payments.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;E-commerce schema — customers, orders, products, payments.&quot;,
+  &quot;type&quot;: &quot;datadict&quot;,
+  &quot;title&quot;: &quot;e-commerce schema&quot;,
+  &quot;entities&quot;: [
+    {
+      &quot;id&quot;: &quot;customers&quot;,
+      &quot;label&quot;: &quot;customers&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;email&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;address&quot;,
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;nullable&quot;: true
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;products&quot;,
+      &quot;label&quot;: &quot;products&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;sku&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;name&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;price&quot;,
+          &quot;type&quot;: &quot;decimal&quot;
+        },
+        {
+          &quot;name&quot;: &quot;stock_qty&quot;,
+          &quot;type&quot;: &quot;int&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;orders&quot;,
+      &quot;label&quot;: &quot;orders&quot;,
+      &quot;accent&quot;: &quot;accent&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;customer_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;status&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;total&quot;,
+          &quot;type&quot;: &quot;decimal&quot;
+        },
+        {
+          &quot;name&quot;: &quot;placed_at&quot;,
+          &quot;type&quot;: &quot;timestamp&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;order_items&quot;,
+      &quot;label&quot;: &quot;order_items&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;order_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;product_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;qty&quot;,
+          &quot;type&quot;: &quot;int&quot;
+        },
+        {
+          &quot;name&quot;: &quot;unit_price&quot;,
+          &quot;type&quot;: &quot;decimal&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;payments&quot;,
+      &quot;label&quot;: &quot;payments&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;order_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;amount&quot;,
+          &quot;type&quot;: &quot;decimal&quot;
+        },
+        {
+          &quot;name&quot;: &quot;method&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;captured&quot;,
+          &quot;type&quot;: &quot;boolean&quot;
+        }
+      ]
+    }
+  ],
+  &quot;relations&quot;: [
+    {
+      &quot;from&quot;: &quot;orders.customer_id&quot;,
+      &quot;to&quot;: &quot;customers.id&quot;,
+      &quot;label&quot;: &quot;placed by&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;order_items.order_id&quot;,
+      &quot;to&quot;: &quot;orders.id&quot;,
+      &quot;label&quot;: &quot;in&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;order_items.product_id&quot;,
+      &quot;to&quot;: &quot;products.id&quot;,
+      &quot;label&quot;: &quot;of&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;payments.order_id&quot;,
+      &quot;to&quot;: &quot;orders.id&quot;,
+      &quot;label&quot;: &quot;pays&quot;,
+      &quot;kind&quot;: &quot;one-to-one&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-social</div>
+<div class="card-image">
+<a href="05-datadict/03-social.png" target="_blank"><img src="05-datadict/03-social.png" alt="03-social"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> datadict</span>
+<span><strong>elements:</strong> 36</span>
+<span><strong>render:</strong> 109ms</span>
+<span><a href="05-datadict/03-social.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Social-network schema with self-referential follow relation.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Social-network schema with self-referential follow relation.&quot;,
+  &quot;type&quot;: &quot;datadict&quot;,
+  &quot;title&quot;: &quot;social network schema&quot;,
+  &quot;entities&quot;: [
+    {
+      &quot;id&quot;: &quot;users&quot;,
+      &quot;label&quot;: &quot;users&quot;,
+      &quot;accent&quot;: &quot;accent&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;handle&quot;,
+          &quot;type&quot;: &quot;varchar&quot;
+        },
+        {
+          &quot;name&quot;: &quot;bio&quot;,
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;nullable&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;avatar_url&quot;,
+          &quot;type&quot;: &quot;varchar&quot;,
+          &quot;nullable&quot;: true
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;posts&quot;,
+      &quot;label&quot;: &quot;posts&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;author_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;body&quot;,
+          &quot;type&quot;: &quot;text&quot;
+        },
+        {
+          &quot;name&quot;: &quot;media_url&quot;,
+          &quot;type&quot;: &quot;varchar&quot;,
+          &quot;nullable&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;posted_at&quot;,
+          &quot;type&quot;: &quot;timestamp&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;follows&quot;,
+      &quot;label&quot;: &quot;follows&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;follower_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;followee_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;likes&quot;,
+      &quot;label&quot;: &quot;likes&quot;,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;user_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        },
+        {
+          &quot;name&quot;: &quot;post_id&quot;,
+          &quot;type&quot;: &quot;uuid&quot;,
+          &quot;pk&quot;: true,
+          &quot;fk&quot;: true
+        }
+      ]
+    }
+  ],
+  &quot;relations&quot;: [
+    {
+      &quot;from&quot;: &quot;posts.author_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;wrote&quot;,
+      &quot;kind&quot;: &quot;one-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;follows.follower_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;follower&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;follows.followee_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;followee&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;likes.user_id&quot;,
+      &quot;to&quot;: &quot;users.id&quot;,
+      &quot;label&quot;: &quot;user&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    },
+    {
+      &quot;from&quot;: &quot;likes.post_id&quot;,
+      &quot;to&quot;: &quot;posts.id&quot;,
+      &quot;label&quot;: &quot;post&quot;,
+      &quot;kind&quot;: &quot;many-to-many&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>mermaid (5)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-flowchart-tb</div>
+<div class="card-image">
+<a href="06-mermaid/01-flowchart-tb.png" target="_blank"><img src="06-mermaid/01-flowchart-tb.png" alt="01-flowchart-tb"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mermaid</span>
+<span><strong>elements:</strong> 17</span>
+<span><strong>render:</strong> 189ms</span>
+<span><a href="06-mermaid/01-flowchart-tb.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Mermaid flowchart top-to-bottom — official mermaid docs example.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Mermaid flowchart top-to-bottom — official mermaid docs example.&quot;,
+  &quot;type&quot;: &quot;mermaid&quot;,
+  &quot;title&quot;: &quot;mermaid flowchart TB&quot;,
+  &quot;mermaid&quot;: &quot;flowchart TB\n    A[Start] --&gt; B{Is it?}\n    B -- Yes --&gt; C[OK]\n    C --&gt; D[Rethink]\n    D --&gt; B\n    B -- No ----&gt; E[End]&quot;
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-flowchart-lr</div>
+<div class="card-image">
+<a href="06-mermaid/02-flowchart-lr.png" target="_blank"><img src="06-mermaid/02-flowchart-lr.png" alt="02-flowchart-lr"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mermaid</span>
+<span><strong>elements:</strong> 17</span>
+<span><strong>render:</strong> 136ms</span>
+<span><a href="06-mermaid/02-flowchart-lr.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Mermaid flowchart left-to-right with subgraph — exercises mermaid&#39;s grouping.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Mermaid flowchart left-to-right with subgraph — exercises mermaid&#39;s grouping.&quot;,
+  &quot;type&quot;: &quot;mermaid&quot;,
+  &quot;title&quot;: &quot;mermaid flowchart LR with subgraph&quot;,
+  &quot;mermaid&quot;: &quot;flowchart LR\n    A[Hard] --&gt;|Text| B(Round)\n    B --&gt; C{Decision}\n    C --&gt;|One| D[Result 1]\n    C --&gt;|Two| E[Result 2]&quot;
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-sequence</div>
+<div class="card-image">
+<a href="06-mermaid/03-sequence.png" target="_blank"><img src="06-mermaid/03-sequence.png" alt="03-sequence"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mermaid</span>
+<span><strong>elements:</strong> 29</span>
+<span><strong>render:</strong> 187ms</span>
+<span><a href="06-mermaid/03-sequence.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Mermaid sequence diagram — exercises mermaid&#39;s autonumbering + activations.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Mermaid sequence diagram — exercises mermaid&#39;s autonumbering + activations.&quot;,
+  &quot;type&quot;: &quot;mermaid&quot;,
+  &quot;title&quot;: &quot;mermaid sequence&quot;,
+  &quot;mermaid&quot;: &quot;sequenceDiagram\n    Alice-&gt;&gt;Bob: Hello Bob, how are you?\n    Bob--&gt;&gt;John: How about you John?\n    Bob--x Alice: I am good thanks!\n    Bob-x John: I am good thanks!\n    Note right of John: Bob thinks a long&lt;br/&gt;long time, so long&lt;br/&gt;that the text does&lt;br/&gt;not fit on a row.\n    Bob--&gt;Alice: Checking with John...\n    Alice-&gt;John: Yes... John, how are you?&quot;
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">04-class</div>
+<div class="card-image">
+<a href="06-mermaid/04-class.png" target="_blank"><img src="06-mermaid/04-class.png" alt="04-class"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mermaid</span>
+<span><strong>elements:</strong> 30</span>
+<span><strong>render:</strong> 220ms</span>
+<span><a href="06-mermaid/04-class.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Mermaid class diagram — UML class relationships.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Mermaid class diagram — UML class relationships.&quot;,
+  &quot;type&quot;: &quot;mermaid&quot;,
+  &quot;title&quot;: &quot;mermaid class diagram&quot;,
+  &quot;mermaid&quot;: &quot;classDiagram\n    Animal &lt;|-- Duck\n    Animal &lt;|-- Fish\n    Animal &lt;|-- Zebra\n    Animal : +int age\n    Animal : +String gender\n    Animal: +isMammal()\n    Animal: +mate()\n    class Duck{\n      +String beakColor\n      +swim()\n      +quack()\n    }\n    class Fish{\n      -int sizeInFeet\n      -canEat()\n    }\n    class Zebra{\n      +bool is_wild\n      +run()\n    }&quot;
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">05-state</div>
+<div class="card-image">
+<a href="06-mermaid/05-state.png" target="_blank"><img src="06-mermaid/05-state.png" alt="05-state"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> mermaid</span>
+<span><strong>elements:</strong> 15</span>
+<span><strong>render:</strong> 119ms</span>
+<span><a href="06-mermaid/05-state.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Mermaid state diagram — state machine.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Mermaid state diagram — state machine.&quot;,
+  &quot;type&quot;: &quot;mermaid&quot;,
+  &quot;title&quot;: &quot;mermaid state diagram&quot;,
+  &quot;mermaid&quot;: &quot;stateDiagram-v2\n    [*] --&gt; Still\n    Still --&gt; [*]\n    Still --&gt; Moving\n    Moving --&gt; Still\n    Moving --&gt; Crash\n    Crash --&gt; [*]&quot;
+}</pre></details>
+</div>
+</div>
+<h2>styles (5)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-notebook</div>
+<div class="card-image">
+<a href="07-styles/01-notebook.png" target="_blank"><img src="07-styles/01-notebook.png" alt="01-notebook"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>style:</strong> notebook</span>
+<span><strong>elements:</strong> 14</span>
+<span><strong>render:</strong> 70ms</span>
+<span><a href="07-styles/01-notebook.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Same graph in style: notebook (default).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Same graph in style: notebook (default).&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;style: notebook&quot;,
+  &quot;style&quot;: &quot;notebook&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;Plan&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Ship&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;Iterate&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;feedback&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-whiteboard</div>
+<div class="card-image">
+<a href="07-styles/02-whiteboard.png" target="_blank"><img src="07-styles/02-whiteboard.png" alt="02-whiteboard"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>style:</strong> whiteboard</span>
+<span><strong>elements:</strong> 14</span>
+<span><strong>render:</strong> 68ms</span>
+<span><a href="07-styles/02-whiteboard.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Same graph in style: whiteboard.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Same graph in style: whiteboard.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;style: whiteboard&quot;,
+  &quot;style&quot;: &quot;whiteboard&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;Plan&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Ship&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;Iterate&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;feedback&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-clean</div>
+<div class="card-image">
+<a href="07-styles/03-clean.png" target="_blank"><img src="07-styles/03-clean.png" alt="03-clean"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>style:</strong> clean</span>
+<span><strong>elements:</strong> 14</span>
+<span><strong>render:</strong> 15ms</span>
+<span><a href="07-styles/03-clean.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Same graph in style: clean (roughness 0, Helvetica, print-ready).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Same graph in style: clean (roughness 0, Helvetica, print-ready).&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;style: clean&quot;,
+  &quot;style&quot;: &quot;clean&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;Plan&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Ship&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;Iterate&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;feedback&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">04-dark</div>
+<div class="card-image">
+<a href="07-styles/04-dark.png" target="_blank"><img src="07-styles/04-dark.png" alt="04-dark"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>style:</strong> dark</span>
+<span><strong>elements:</strong> 14</span>
+<span><strong>render:</strong> 65ms</span>
+<span><a href="07-styles/04-dark.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Same graph in style: dark.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Same graph in style: dark.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;style: dark&quot;,
+  &quot;style&quot;: &quot;dark&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;Plan&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Ship&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;Iterate&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;feedback&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">05-inline-tuned</div>
+<div class="card-image">
+<a href="07-styles/05-inline-tuned.png" target="_blank"><img src="07-styles/05-inline-tuned.png" alt="05-inline-tuned"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>style:</strong> notebook</span>
+<span><strong>elements:</strong> 14</span>
+<span><strong>render:</strong> 70ms</span>
+<span><a href="07-styles/05-inline-tuned.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Inline-tuned style: notebook base with custom palette + seed.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Inline-tuned style: notebook base with custom palette + seed.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;style: inline-tuned&quot;,
+  &quot;style&quot;: {
+    &quot;name&quot;: &quot;notebook&quot;,
+    &quot;Roughness&quot;: 2,
+    &quot;StrokeWidth&quot;: 3,
+    &quot;FontSize&quot;: 22,
+    &quot;Palette&quot;: {
+      &quot;ink&quot;: &quot;#0A0A0A&quot;,
+      &quot;accent&quot;: &quot;#FF4B33&quot;,
+      &quot;link&quot;: &quot;#1B8A6B&quot;
+    },
+    &quot;RandomSeedSalt&quot;: 777
+  },
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;Plan&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Build&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Ship&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;Iterate&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;yes&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;feedback&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+</div>
+<h2>edges (9)</h2>
+<div class="grid">
+<div class="card">
+<div class="card-name">01-single-node</div>
+<div class="card-image">
+<a href="08-edges/01-single-node.png" target="_blank"><img src="08-edges/01-single-node.png" alt="01-single-node"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 3</span>
+<span><strong>render:</strong> 57ms</span>
+<span><a href="08-edges/01-single-node.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: one node, no edges.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: one node, no edges.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;minimal&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;lonely&quot;,
+      &quot;label&quot;: &quot;I am alone&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    }
+  ],
+  &quot;edges&quot;: []
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">02-cycle</div>
+<div class="card-image">
+<a href="08-edges/02-cycle.png" target="_blank"><img src="08-edges/02-cycle.png" alt="02-cycle"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 10</span>
+<span><strong>render:</strong> 95ms</span>
+<span><a href="08-edges/02-cycle.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: a cycle in a flow diagram (topo sort falls back to insertion order).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: a cycle in a flow diagram (topo sort falls back to insertion order).&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;cycle (A→B→C→A)&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;A&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;B&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;C&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;
+    },
+    {
+      &quot;from&quot;: &quot;c&quot;,
+      &quot;to&quot;: &quot;a&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">03-self-loop</div>
+<div class="card-image">
+<a href="08-edges/03-self-loop.png" target="_blank"><img src="08-edges/03-self-loop.png" alt="03-self-loop"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 5</span>
+<span><strong>render:</strong> 54ms</span>
+<span><a href="08-edges/03-self-loop.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: a node with an edge to itself.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: a node with an edge to itself.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;self-loop&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;retry&quot;,
+      &quot;label&quot;: &quot;Retry&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;retry&quot;,
+      &quot;to&quot;: &quot;retry&quot;,
+      &quot;label&quot;: &quot;again&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">04-unicode-labels</div>
+<div class="card-image">
+<a href="08-edges/04-unicode-labels.png" target="_blank"><img src="08-edges/04-unicode-labels.png" alt="04-unicode-labels"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 15</span>
+<span><strong>render:</strong> 387ms</span>
+<span><a href="08-edges/04-unicode-labels.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: Unicode in labels (Cyrillic, CJK, emoji, math symbols).</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: Unicode in labels (Cyrillic, CJK, emoji, math symbols).&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;unicode labels: 中文 / Кириллица / 日本語 / 🚀&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;user&quot;,
+      &quot;label&quot;: &quot;用户&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;server&quot;,
+      &quot;label&quot;: &quot;Сервер&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;queue&quot;,
+      &quot;label&quot;: &quot;メッセージキュー&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;result&quot;,
+      &quot;label&quot;: &quot;✅ Done&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;user&quot;,
+      &quot;to&quot;: &quot;server&quot;,
+      &quot;label&quot;: &quot;→ запрос&quot;
+    },
+    {
+      &quot;from&quot;: &quot;server&quot;,
+      &quot;to&quot;: &quot;queue&quot;,
+      &quot;label&quot;: &quot;公開&quot;
+    },
+    {
+      &quot;from&quot;: &quot;queue&quot;,
+      &quot;to&quot;: &quot;result&quot;,
+      &quot;label&quot;: &quot;🎉&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">05-long-labels</div>
+<div class="card-image">
+<a href="08-edges/05-long-labels.png" target="_blank"><img src="08-edges/05-long-labels.png" alt="05-long-labels"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 11</span>
+<span><strong>render:</strong> 86ms</span>
+<span><a href="08-edges/05-long-labels.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: very long labels — does the auto-sizing keep up?</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: very long labels — does the auto-sizing keep up?&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;long labels stress test&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;label&quot;: &quot;User submits the form via the website&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;Backend validates the payload against the schema&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;Notification service publishes to subscribers&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a&quot;,
+      &quot;to&quot;: &quot;b&quot;,
+      &quot;label&quot;: &quot;POST /api/v1/widgets&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b&quot;,
+      &quot;to&quot;: &quot;c&quot;,
+      &quot;label&quot;: &quot;event published to message bus&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">06-all-node-kinds</div>
+<div class="card-image">
+<a href="08-edges/06-all-node-kinds.png" target="_blank"><img src="08-edges/06-all-node-kinds.png" alt="06-all-node-kinds"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 12</span>
+<span><strong>render:</strong> 71ms</span>
+<span><a href="08-edges/06-all-node-kinds.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: every node kind in one diagram.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: every node kind in one diagram.&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;all node kinds&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;r&quot;,
+      &quot;label&quot;: &quot;rectangle&quot;,
+      &quot;kind&quot;: &quot;rectangle&quot;
+    },
+    {
+      &quot;id&quot;: &quot;e&quot;,
+      &quot;label&quot;: &quot;ellipse&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;label&quot;: &quot;diamond&quot;,
+      &quot;kind&quot;: &quot;diamond&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n&quot;,
+      &quot;label&quot;: &quot;note (sticky)&quot;,
+      &quot;kind&quot;: &quot;note&quot;,
+      &quot;background&quot;: &quot;highlight&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;r&quot;,
+      &quot;to&quot;: &quot;e&quot;,
+      &quot;kind&quot;: &quot;solid&quot;
+    },
+    {
+      &quot;from&quot;: &quot;e&quot;,
+      &quot;to&quot;: &quot;d&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    },
+    {
+      &quot;from&quot;: &quot;d&quot;,
+      &quot;to&quot;: &quot;n&quot;,
+      &quot;kind&quot;: &quot;dotted&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">07-all-accents</div>
+<div class="card-image">
+<a href="08-edges/07-all-accents.png" target="_blank"><img src="08-edges/07-all-accents.png" alt="07-all-accents"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> star</span>
+<span><strong>elements:</strong> 18</span>
+<span><strong>render:</strong> 68ms</span>
+<span><a href="08-edges/07-all-accents.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: every accent color in one diagram.</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: every accent color in one diagram.&quot;,
+  &quot;type&quot;: &quot;star&quot;,
+  &quot;title&quot;: &quot;all accents&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;hub&quot;,
+      &quot;label&quot;: &quot;Hub&quot;,
+      &quot;kind&quot;: &quot;ellipse&quot;
+    },
+    {
+      &quot;id&quot;: &quot;ink&quot;,
+      &quot;label&quot;: &quot;ink&quot;,
+      &quot;accent&quot;: &quot;ink&quot;
+    },
+    {
+      &quot;id&quot;: &quot;acc&quot;,
+      &quot;label&quot;: &quot;accent&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;id&quot;: &quot;hi&quot;,
+      &quot;label&quot;: &quot;highlight&quot;,
+      &quot;accent&quot;: &quot;highlight&quot;
+    },
+    {
+      &quot;id&quot;: &quot;link&quot;,
+      &quot;label&quot;: &quot;link&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;id&quot;: &quot;dim&quot;,
+      &quot;label&quot;: &quot;deemphasis&quot;,
+      &quot;accent&quot;: &quot;deemphasis&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;hub&quot;,
+      &quot;to&quot;: &quot;ink&quot;
+    },
+    {
+      &quot;from&quot;: &quot;hub&quot;,
+      &quot;to&quot;: &quot;acc&quot;,
+      &quot;accent&quot;: &quot;accent&quot;
+    },
+    {
+      &quot;from&quot;: &quot;hub&quot;,
+      &quot;to&quot;: &quot;hi&quot;,
+      &quot;accent&quot;: &quot;highlight&quot;
+    },
+    {
+      &quot;from&quot;: &quot;hub&quot;,
+      &quot;to&quot;: &quot;link&quot;,
+      &quot;accent&quot;: &quot;link&quot;
+    },
+    {
+      &quot;from&quot;: &quot;hub&quot;,
+      &quot;to&quot;: &quot;dim&quot;,
+      &quot;accent&quot;: &quot;deemphasis&quot;,
+      &quot;kind&quot;: &quot;dashed&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">08-disconnected</div>
+<div class="card-image">
+<a href="08-edges/08-disconnected.png" target="_blank"><img src="08-edges/08-disconnected.png" alt="08-disconnected"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 17</span>
+<span><strong>render:</strong> 72ms</span>
+<span><a href="08-edges/08-disconnected.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Edge case: 3 disconnected components — does layout handle them gracefully?</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Edge case: 3 disconnected components — does layout handle them gracefully?&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;title&quot;: &quot;disconnected components&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;a1&quot;,
+      &quot;label&quot;: &quot;A1&quot;
+    },
+    {
+      &quot;id&quot;: &quot;a2&quot;,
+      &quot;label&quot;: &quot;A2&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b1&quot;,
+      &quot;label&quot;: &quot;B1&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b2&quot;,
+      &quot;label&quot;: &quot;B2&quot;
+    },
+    {
+      &quot;id&quot;: &quot;b3&quot;,
+      &quot;label&quot;: &quot;B3&quot;
+    },
+    {
+      &quot;id&quot;: &quot;c1&quot;,
+      &quot;label&quot;: &quot;C1&quot;
+    }
+  ],
+  &quot;edges&quot;: [
+    {
+      &quot;from&quot;: &quot;a1&quot;,
+      &quot;to&quot;: &quot;a2&quot;,
+      &quot;label&quot;: &quot;x&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b1&quot;,
+      &quot;to&quot;: &quot;b2&quot;
+    },
+    {
+      &quot;from&quot;: &quot;b2&quot;,
+      &quot;to&quot;: &quot;b3&quot;
+    }
+  ]
+}</pre></details>
+</div>
+<div class="card">
+<div class="card-name">09-many-nodes</div>
+<div class="card-image">
+<a href="08-edges/09-many-nodes.png" target="_blank"><img src="08-edges/09-many-nodes.png" alt="09-many-nodes"></a>
+</div>
+<div class="card-meta">
+<span><strong>type:</strong> flow</span>
+<span><strong>elements:</strong> 61</span>
+<span><strong>render:</strong> 152ms</span>
+<span><a href="08-edges/09-many-nodes.svg" target="_blank">.svg</a></span>
+</div>
+<details><summary>about</summary><pre>Stress test: 30-node grid layout — does Excalidraw + layout cope?</pre></details>
+<details><summary>fixture JSON</summary><pre>{
+  &quot;_description&quot;: &quot;Stress test: 30-node grid layout — does Excalidraw + layout cope?&quot;,
+  &quot;type&quot;: &quot;flow&quot;,
+  &quot;layout&quot;: &quot;grid&quot;,
+  &quot;title&quot;: &quot;30-node grid&quot;,
+  &quot;nodes&quot;: [
+    {
+      &quot;id&quot;: &quot;n01&quot;,
+      &quot;label&quot;: &quot;Node 01&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n02&quot;,
+      &quot;label&quot;: &quot;Node 02&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n03&quot;,
+      &quot;label&quot;: &quot;Node 03&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n04&quot;,
+      &quot;label&quot;: &quot;Node 04&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n05&quot;,
+      &quot;label&quot;: &quot;Node 05&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n06&quot;,
+      &quot;label&quot;: &quot;Node 06&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n07&quot;,
+      &quot;label&quot;: &quot;Node 07&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n08&quot;,
+      &quot;label&quot;: &quot;Node 08&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n09&quot;,
+      &quot;label&quot;: &quot;Node 09&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n10&quot;,
+      &quot;label&quot;: &quot;Node 10&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n11&quot;,
+      &quot;label&quot;: &quot;Node 11&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n12&quot;,
+      &quot;label&quot;: &quot;Node 12&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n13&quot;,
+      &quot;label&quot;: &quot;Node 13&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n14&quot;,
+      &quot;label&quot;: &quot;Node 14&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n15&quot;,
+      &quot;label&quot;: &quot;Node 15&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n16&quot;,
+      &quot;label&quot;: &quot;Node 16&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n17&quot;,
+      &quot;label&quot;: &quot;Node 17&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n18&quot;,
+      &quot;label&quot;: &quot;Node 18&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n19&quot;,
+      &quot;label&quot;: &quot;Node 19&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n20&quot;,
+      &quot;label&quot;: &quot;Node 20&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n21&quot;,
+      &quot;label&quot;: &quot;Node 21&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n22&quot;,
+      &quot;label&quot;: &quot;Node 22&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n23&quot;,
+      &quot;label&quot;: &quot;Node 23&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n24&quot;,
+      &quot;label&quot;: &quot;Node 24&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n25&quot;,
+      &quot;label&quot;: &quot;Node 25&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n26&quot;,
+      &quot;label&quot;: &quot;Node 26&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n27&quot;,
+      &quot;label&quot;: &quot;Node 27&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n28&quot;,
+      &quot;label&quot;: &quot;Node 28&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n29&quot;,
+      &quot;label&quot;: &quot;Node 29&quot;
+    },
+    {
+      &quot;id&quot;: &quot;n30&quot;,
+      &quot;label&quot;: &quot;Node 30&quot;
+    }
+  ],
+  &quot;edges&quot;: []
+}</pre></details>
+</div>
+</div>
+</body></html>

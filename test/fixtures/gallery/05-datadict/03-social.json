@@ -1,0 +1,52 @@
+{
+	"_description": "Social-network schema with self-referential follow relation.",
+	"type": "datadict",
+	"title": "social network schema",
+	"entities": [
+		{
+			"id": "users",
+			"label": "users",
+			"accent": "accent",
+			"fields": [
+				{ "name": "id",       "type": "uuid",    "pk": true },
+				{ "name": "handle",   "type": "varchar" },
+				{ "name": "bio",      "type": "text",    "nullable": true },
+				{ "name": "avatar_url","type": "varchar","nullable": true }
+			]
+		},
+		{
+			"id": "posts",
+			"label": "posts",
+			"fields": [
+				{ "name": "id",         "type": "uuid",    "pk": true },
+				{ "name": "author_id",  "type": "uuid",    "fk": true },
+				{ "name": "body",       "type": "text" },
+				{ "name": "media_url",  "type": "varchar", "nullable": true },
+				{ "name": "posted_at",  "type": "timestamp" }
+			]
+		},
+		{
+			"id": "follows",
+			"label": "follows",
+			"fields": [
+				{ "name": "follower_id", "type": "uuid", "pk": true, "fk": true },
+				{ "name": "followee_id", "type": "uuid", "pk": true, "fk": true }
+			]
+		},
+		{
+			"id": "likes",
+			"label": "likes",
+			"fields": [
+				{ "name": "user_id", "type": "uuid", "pk": true, "fk": true },
+				{ "name": "post_id", "type": "uuid", "pk": true, "fk": true }
+			]
+		}
+	],
+	"relations": [
+		{ "from": "posts.author_id",      "to": "users.id", "label": "wrote",     "kind": "one-to-many" },
+		{ "from": "follows.follower_id",  "to": "users.id", "label": "follower",  "kind": "many-to-many" },
+		{ "from": "follows.followee_id",  "to": "users.id", "label": "followee",  "kind": "many-to-many" },
+		{ "from": "likes.user_id",        "to": "users.id", "label": "user",      "kind": "many-to-many" },
+		{ "from": "likes.post_id",        "to": "posts.id", "label": "post",      "kind": "many-to-many" }
+	]
+}

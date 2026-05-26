@@ -1,0 +1,63 @@
+{
+	"_description": "A blogging-platform ER diagram: users, posts, comments, tags.",
+	"type": "datadict",
+	"title": "blog ER",
+	"entities": [
+		{
+			"id": "users",
+			"label": "users",
+			"fields": [
+				{ "name": "id",          "type": "uuid",      "pk": true },
+				{ "name": "email",       "type": "varchar" },
+				{ "name": "name",        "type": "varchar" },
+				{ "name": "created_at",  "type": "timestamp" }
+			]
+		},
+		{
+			"id": "posts",
+			"label": "posts",
+			"accent": "accent",
+			"fields": [
+				{ "name": "id",          "type": "uuid",      "pk": true },
+				{ "name": "author_id",   "type": "uuid",      "fk": true },
+				{ "name": "title",       "type": "varchar" },
+				{ "name": "body",        "type": "text" },
+				{ "name": "published_at","type": "timestamp", "nullable": true }
+			]
+		},
+		{
+			"id": "comments",
+			"label": "comments",
+			"fields": [
+				{ "name": "id",        "type": "uuid",      "pk": true },
+				{ "name": "post_id",   "type": "uuid",      "fk": true },
+				{ "name": "author_id", "type": "uuid",      "fk": true },
+				{ "name": "body",      "type": "text" },
+				{ "name": "created_at","type": "timestamp" }
+			]
+		},
+		{
+			"id": "tags",
+			"label": "tags",
+			"fields": [
+				{ "name": "id",   "type": "uuid",    "pk": true },
+				{ "name": "name", "type": "varchar" }
+			]
+		},
+		{
+			"id": "post_tags",
+			"label": "post_tags",
+			"fields": [
+				{ "name": "post_id", "type": "uuid", "pk": true, "fk": true },
+				{ "name": "tag_id",  "type": "uuid", "pk": true, "fk": true }
+			]
+		}
+	],
+	"relations": [
+		{ "from": "posts.author_id",     "to": "users.id",    "label": "wrote",      "kind": "one-to-many" },
+		{ "from": "comments.post_id",    "to": "posts.id",    "label": "on",         "kind": "one-to-many" },
+		{ "from": "comments.author_id",  "to": "users.id",    "label": "by",         "kind": "one-to-many" },
+		{ "from": "post_tags.post_id",   "to": "posts.id",    "label": "tags",       "kind": "many-to-many" },
+		{ "from": "post_tags.tag_id",    "to": "tags.id",     "label": "tagged-by",  "kind": "many-to-many" }
+	]
+}

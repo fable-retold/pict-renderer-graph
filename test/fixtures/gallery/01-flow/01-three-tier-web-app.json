@@ -1,0 +1,22 @@
+{
+	"_description": "Classic three-tier web app: User → CDN/LB → web → API → DB, with cache off to the side.",
+	"type": "flow",
+	"title": "three-tier web app",
+	"nodes": [
+		{ "id": "user",  "label": "User",       "kind": "ellipse" },
+		{ "id": "cdn",   "label": "CDN",        "kind": "rectangle" },
+		{ "id": "lb",    "label": "Load\nBalancer", "kind": "rectangle" },
+		{ "id": "web",   "label": "Web Server", "kind": "rectangle" },
+		{ "id": "api",   "label": "API",        "kind": "rectangle", "accent": "accent" },
+		{ "id": "cache", "label": "Cache",      "kind": "note", "background": "highlight" },
+		{ "id": "db",    "label": "Database",   "kind": "rectangle" }
+	],
+	"edges": [
+		{ "from": "user", "to": "cdn", "label": "static" },
+		{ "from": "user", "to": "lb",  "label": "dynamic" },
+		{ "from": "lb",   "to": "web" },
+		{ "from": "web",  "to": "api", "label": "REST" },
+		{ "from": "api",  "to": "cache", "label": "lookup", "kind": "dashed" },
+		{ "from": "api",  "to": "db",  "label": "query" }
+	]
+}

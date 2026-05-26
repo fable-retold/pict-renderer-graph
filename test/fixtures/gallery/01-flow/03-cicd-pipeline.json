@@ -1,0 +1,24 @@
+{
+	"_description": "CI/CD pipeline: source → build → test → staging → prod, with rollback path.",
+	"type": "flow",
+	"title": "CI/CD pipeline",
+	"nodes": [
+		{ "id": "src",    "label": "git push",       "kind": "ellipse" },
+		{ "id": "build",  "label": "build",          "kind": "rectangle" },
+		{ "id": "unit",   "label": "unit tests",     "kind": "rectangle" },
+		{ "id": "e2e",    "label": "e2e tests",      "kind": "rectangle" },
+		{ "id": "stage",  "label": "staging deploy", "kind": "rectangle" },
+		{ "id": "smoke",  "label": "smoke tests",    "kind": "rectangle" },
+		{ "id": "prod",   "label": "production",     "kind": "ellipse", "accent": "accent" },
+		{ "id": "back",   "label": "rollback",       "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "src",   "to": "build" },
+		{ "from": "build", "to": "unit",  "label": "pass" },
+		{ "from": "unit",  "to": "e2e",   "label": "pass" },
+		{ "from": "e2e",   "to": "stage" },
+		{ "from": "stage", "to": "smoke" },
+		{ "from": "smoke", "to": "prod",  "label": "approve" },
+		{ "from": "prod",  "to": "back",  "label": "if broken", "kind": "dashed" }
+	]
+}

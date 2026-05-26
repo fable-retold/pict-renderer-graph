@@ -1,0 +1,22 @@
+{
+	"_description": "OAuth 2.0 authorization-code flow (RFC 6749 §4.1). The canonical web-app sign-in handshake.",
+	"type": "sequence",
+	"title": "OAuth 2.0 authorization code",
+	"actors": [
+		{ "id": "user",  "label": "User" },
+		{ "id": "app",   "label": "Client App" },
+		{ "id": "auth",  "label": "Auth Server", "accent": "accent" },
+		{ "id": "rs",    "label": "Resource\nServer" }
+	],
+	"messages": [
+		{ "from": "user", "to": "app",  "label": "click 'sign in'" },
+		{ "from": "app",  "to": "auth", "label": "GET /authorize" },
+		{ "from": "auth", "to": "user", "label": "login + consent" },
+		{ "from": "user", "to": "auth", "label": "approve" },
+		{ "from": "auth", "to": "app",  "label": "redirect ?code=…", "kind": "return" },
+		{ "from": "app",  "to": "auth", "label": "POST /token (code)" },
+		{ "from": "auth", "to": "app",  "label": "access_token", "kind": "return" },
+		{ "from": "app",  "to": "rs",   "label": "GET /resource\n(Bearer token)" },
+		{ "from": "rs",   "to": "app",  "label": "resource", "kind": "return" }
+	]
+}

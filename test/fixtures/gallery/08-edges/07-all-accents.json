@@ -1,0 +1,20 @@
+{
+	"_description": "Edge case: every accent color in one diagram.",
+	"type": "star",
+	"title": "all accents",
+	"nodes": [
+		{ "id": "hub",  "label": "Hub",        "kind": "ellipse" },
+		{ "id": "ink",  "label": "ink",        "accent": "ink" },
+		{ "id": "acc",  "label": "accent",     "accent": "accent" },
+		{ "id": "hi",   "label": "highlight",  "accent": "highlight" },
+		{ "id": "link", "label": "link",       "accent": "link" },
+		{ "id": "dim",  "label": "deemphasis", "accent": "deemphasis" }
+	],
+	"edges": [
+		{ "from": "hub", "to": "ink" },
+		{ "from": "hub", "to": "acc",  "accent": "accent" },
+		{ "from": "hub", "to": "hi",   "accent": "highlight" },
+		{ "from": "hub", "to": "link", "accent": "link" },
+		{ "from": "hub", "to": "dim",  "accent": "deemphasis", "kind": "dashed" }
+	]
+}

@@ -1,0 +1,67 @@
+{
+	"_description": "E-commerce schema — customers, orders, products, payments.",
+	"type": "datadict",
+	"title": "e-commerce schema",
+	"entities": [
+		{
+			"id": "customers",
+			"label": "customers",
+			"fields": [
+				{ "name": "id",      "type": "uuid",    "pk": true },
+				{ "name": "email",   "type": "varchar" },
+				{ "name": "address", "type": "text",    "nullable": true }
+			]
+		},
+		{
+			"id": "products",
+			"label": "products",
+			"fields": [
+				{ "name": "id",       "type": "uuid",    "pk": true },
+				{ "name": "sku",      "type": "varchar" },
+				{ "name": "name",     "type": "varchar" },
+				{ "name": "price",    "type": "decimal" },
+				{ "name": "stock_qty","type": "int" }
+			]
+		},
+		{
+			"id": "orders",
+			"label": "orders",
+			"accent": "accent",
+			"fields": [
+				{ "name": "id",          "type": "uuid",    "pk": true },
+				{ "name": "customer_id", "type": "uuid",    "fk": true },
+				{ "name": "status",      "type": "varchar" },
+				{ "name": "total",       "type": "decimal" },
+				{ "name": "placed_at",   "type": "timestamp" }
+			]
+		},
+		{
+			"id": "order_items",
+			"label": "order_items",
+			"fields": [
+				{ "name": "id",         "type": "uuid",    "pk": true },
+				{ "name": "order_id",   "type": "uuid",    "fk": true },
+				{ "name": "product_id", "type": "uuid",    "fk": true },
+				{ "name": "qty",        "type": "int" },
+				{ "name": "unit_price", "type": "decimal" }
+			]
+		},
+		{
+			"id": "payments",
+			"label": "payments",
+			"fields": [
+				{ "name": "id",        "type": "uuid",    "pk": true },
+				{ "name": "order_id",  "type": "uuid",    "fk": true },
+				{ "name": "amount",    "type": "decimal" },
+				{ "name": "method",    "type": "varchar" },
+				{ "name": "captured",  "type": "boolean" }
+			]
+		}
+	],
+	"relations": [
+		{ "from": "orders.customer_id",     "to": "customers.id", "label": "placed by", "kind": "one-to-many" },
+		{ "from": "order_items.order_id",   "to": "orders.id",    "label": "in",        "kind": "one-to-many" },
+		{ "from": "order_items.product_id", "to": "products.id",  "label": "of",        "kind": "one-to-many" },
+		{ "from": "payments.order_id",      "to": "orders.id",    "label": "pays",      "kind": "one-to-one" }
+	]
+}

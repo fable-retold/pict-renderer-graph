@@ -1,0 +1,7 @@
+{
+	"_description": "Edge case: one node, no edges.",
+	"type": "flow",
+	"title": "minimal",
+	"nodes": [ { "id": "lonely", "label": "I am alone", "kind": "ellipse" } ],
+	"edges": []
+}

@@ -1,0 +1,17 @@
+{
+	"_description": "Same graph in style: clean (roughness 0, Helvetica, print-ready).",
+	"type": "flow",
+	"title": "style: clean",
+	"style": "clean",
+	"nodes": [
+		{ "id": "a", "label": "Plan", "kind": "ellipse" },
+		{ "id": "b", "label": "Build", "kind": "rectangle" },
+		{ "id": "c", "label": "Ship", "kind": "rectangle", "accent": "accent" },
+		{ "id": "d", "label": "Iterate", "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "a", "to": "b" },
+		{ "from": "b", "to": "c", "label": "yes" },
+		{ "from": "c", "to": "d", "label": "feedback", "kind": "dashed" }
+	]
+}

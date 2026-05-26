@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>pict-renderer-graph host</title>
+		<style>
+			html, body { margin: 0; padding: 0; background: #ffffff; }
+			body { width: 100vw; height: 100vh; overflow: hidden; }
+			/* The wrapper bundle's CSS expects the host to provide a mount
+			   point; we don't actually mount the editor, we only call
+			   exportToSvg/exportToBlob — so we just satisfy the styles
+			   with a hidden div. */
+			#unused-mount { position: absolute; left: -10000px; top: -10000px; width: 1px; height: 1px; }
+		</style>
+		<!-- Excalidraw's own stylesheet — required so exported elements
+		     inherit the font definitions (Excalifont @font-face etc). -->
+		<link rel="stylesheet" href="excalidraw-wrapper.css" />
+		<script>
+			// Tell the wrapper bundle where to fetch font + locale chunks at
+			// runtime.  This is the assets/ subdirectory under our embedded
+			// http server's root.  Set before the wrapper script tag below.
+			window.EXCALIDRAW_ASSET_PATH = './assets/';
+		</script>
+		<script src="react-vendor.min.js"></script>
+		<script src="excalidraw-wrapper.min.js"></script>
+		<script>
+			// Expose a small ready-promise so puppeteer's page.waitForFunction
+			// can wait for the bundle to finish booting.  Once
+			// PictSectionExcalidrawVendor is on window, exportToSvg /
+			// exportToBlob / parseMermaidToExcalidraw are all callable.
+			window.__pictRendererGraphReady = !!(window.PictSectionExcalidrawVendor &&
+				window.PictSectionExcalidrawVendor.exportToSvg);
+
+			// In case the wrapper bundle is still loading (script tag deferred,
+			// font async, etc.), poll for readiness up to 30s.
+			(function pollReady(pStartedAt)
+			{
+				if (window.__pictRendererGraphReady) return;
+				let tmpVendor = window.PictSectionExcalidrawVendor;
+				if (tmpVendor && tmpVendor.exportToSvg)
+				{
+					window.__pictRendererGraphReady = true;
+					return;
+				}
+				if (Date.now() - pStartedAt > 30000)
+				{
+					window.__pictRendererGraphReadyError = 'timed out waiting for PictSectionExcalidrawVendor';
+					return;
+				}
+				setTimeout(function () { pollReady(pStartedAt); }, 100);
+			})(Date.now());
+		</script>
+	</head>
+	<body>
+		<div id="unused-mount"></div>
+	</body>
+</html>

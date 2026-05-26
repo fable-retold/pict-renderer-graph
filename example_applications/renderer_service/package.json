@@ -1,0 +1,18 @@
+{
+	"name": "pict-renderer-graph-renderer-service-example",
+	"version": "1.0.0",
+	"description": "Minimal Orator app instantiating pict-renderer-graph and exposing POST /render — the canonical 'how to drop this into your own service' example.",
+	"main": "Renderer-Service-Application.js",
+	"scripts": {
+		"start": "node Renderer-Service-Application.js"
+	},
+	"author": "steven",
+	"license": "MIT",
+	"dependencies":
+	{
+		"fable":                       "^3.1.75",
+		"orator":                      "^6.1.2",
+		"orator-serviceserver-restify": "^2.0.11",
+		"pict-renderer-graph":         "file:../.."
+	}
+}

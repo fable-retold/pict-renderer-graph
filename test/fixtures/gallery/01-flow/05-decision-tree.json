@@ -1,0 +1,21 @@
+{
+	"_description": "Decision-tree flow with diamond gates: a deployability check.",
+	"type": "flow",
+	"title": "should i ship?",
+	"nodes": [
+		{ "id": "start", "label": "ready?",         "kind": "diamond" },
+		{ "id": "tests", "label": "tests pass?",    "kind": "diamond" },
+		{ "id": "ci",    "label": "CI green?",      "kind": "diamond" },
+		{ "id": "ship",  "label": "ship it",        "kind": "ellipse", "accent": "link" },
+		{ "id": "wait",  "label": "fix + retry",    "kind": "note", "background": "highlight" },
+		{ "id": "back",  "label": "rollback plan",  "kind": "rectangle", "accent": "accent" }
+	],
+	"edges": [
+		{ "from": "start", "to": "tests", "label": "yes" },
+		{ "from": "tests", "to": "ci",    "label": "yes" },
+		{ "from": "tests", "to": "wait",  "label": "no" },
+		{ "from": "ci",    "to": "ship",  "label": "yes" },
+		{ "from": "ci",    "to": "wait",  "label": "no" },
+		{ "from": "ship",  "to": "back",  "label": "and", "kind": "dotted" }
+	]
+}

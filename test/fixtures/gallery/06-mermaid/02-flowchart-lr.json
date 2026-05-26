@@ -1,0 +1,6 @@
+{
+	"_description": "Mermaid flowchart left-to-right with subgraph — exercises mermaid's grouping.",
+	"type": "mermaid",
+	"title": "mermaid flowchart LR with subgraph",
+	"mermaid": "flowchart LR\n    A[Hard] -->|Text| B(Round)\n    B --> C{Decision}\n    C -->|One| D[Result 1]\n    C -->|Two| E[Result 2]"
+}

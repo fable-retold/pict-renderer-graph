@@ -1,0 +1,28 @@
+{
+	"_description": "Microservice mesh: API gateway routing to 5 specialized services, each with its own datastore.",
+	"type": "flow",
+	"title": "microservices",
+	"nodes": [
+		{ "id": "client",  "label": "Client",         "kind": "ellipse" },
+		{ "id": "gw",      "label": "API Gateway",    "kind": "rectangle", "accent": "accent" },
+		{ "id": "auth",    "label": "Auth Service",   "kind": "rectangle" },
+		{ "id": "user",    "label": "User Service",   "kind": "rectangle" },
+		{ "id": "order",   "label": "Order Service",  "kind": "rectangle" },
+		{ "id": "pay",     "label": "Payment Service","kind": "rectangle" },
+		{ "id": "notify",  "label": "Notification\nService","kind": "rectangle" },
+		{ "id": "udb",     "label": "Users DB",       "kind": "rectangle" },
+		{ "id": "odb",     "label": "Orders DB",      "kind": "rectangle" },
+		{ "id": "queue",   "label": "Message Queue",  "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "client", "to": "gw",     "label": "request" },
+		{ "from": "gw",     "to": "auth",   "label": "verify" },
+		{ "from": "gw",     "to": "user" },
+		{ "from": "gw",     "to": "order" },
+		{ "from": "user",   "to": "udb" },
+		{ "from": "order",  "to": "odb" },
+		{ "from": "order",  "to": "pay",    "label": "charge" },
+		{ "from": "order",  "to": "queue",  "label": "publish", "kind": "dashed" },
+		{ "from": "queue",  "to": "notify", "label": "consume", "kind": "dashed" }
+	]
+}

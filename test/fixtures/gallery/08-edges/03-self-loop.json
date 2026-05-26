@@ -1,0 +1,11 @@
+{
+	"_description": "Edge case: a node with an edge to itself.",
+	"type": "flow",
+	"title": "self-loop",
+	"nodes": [
+		{ "id": "retry", "label": "Retry", "kind": "rectangle" }
+	],
+	"edges": [
+		{ "from": "retry", "to": "retry", "label": "again", "kind": "dashed" }
+	]
+}

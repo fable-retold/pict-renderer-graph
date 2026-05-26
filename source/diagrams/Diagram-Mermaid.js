@@ -1,0 +1,84 @@
+/**
+ * Diagram-Mermaid.js
+ *
+ * Pass-through to @excalidraw/mermaid-to-excalidraw, run inside the
+ * wrapper bundle's browser context (since parseMermaidToExcalidraw is
+ * async + relies on mermaid's own dagre/ELK pipeline).
+ *
+ * Input shape:
+ *
+ *   { type: 'mermaid', mermaid: '<mermaid source>', title?, style? }
+ *
+ * The returned scene reuses Excalidraw's internal layout — `style` only
+ * affects the post-export theme tokens (background color, etc.).
+ * Roughness / palette / font don't apply since mermaid-to-excalidraw
+ * builds its own elements with its own defaults.
+ */
+
+module.exports =
+{
+	name:        'mermaid',
+	description: 'Pass-through to @excalidraw/mermaid-to-excalidraw — render any mermaid syntax (flow/sequence/class/state/gantt) in Excalidraw style.',
+	async:       true,
+
+	toScene: function (pGraph, pProfile, pBrowser, fCallback)
+	{
+		if (!pGraph || !pGraph.mermaid)
+		{
+			return fCallback(new Error('mermaid diagrams require a "mermaid" string field with the mermaid source'));
+		}
+		if (!pBrowser || typeof pBrowser.evaluateInPage !== 'function')
+		{
+			return fCallback(new Error('mermaid handler requires a warm browser (parseMermaidToExcalidraw runs in-page)'));
+		}
+
+		// Run the parse inside the browser context via the pool's public
+		// evaluateInPage helper.  Goes through the same queue + page-pool
+		// + backpressure path as render() so concurrent mermaid + non-
+		// mermaid work shares fairly.
+		let tmpEvalFn = async (pIn) =>
+		{
+			let tmpVendor = window.PictSectionExcalidrawVendor;
+			if (!tmpVendor || !tmpVendor.parseMermaidToExcalidraw)
+			{
+				throw new Error('parseMermaidToExcalidraw not available in page (wrapper bundle out of date?)');
+			}
+			let tmpParsed = await tmpVendor.parseMermaidToExcalidraw(pIn.mermaid, pIn.options || {});
+			let tmpSkeleton = (tmpParsed && tmpParsed.elements) || [];
+			let tmpFiles    = (tmpParsed && tmpParsed.files)    || {};
+			let tmpElements = tmpVendor.convertToExcalidrawElements
+				? tmpVendor.convertToExcalidrawElements(tmpSkeleton)
+				: tmpSkeleton;
+			return { elements: tmpElements, files: tmpFiles };
+		};
+
+		let tmpInput = { mermaid: pGraph.mermaid, options: pGraph.mermaidOptions || {} };
+		pBrowser.evaluateInPage(tmpEvalFn, tmpInput, (pErr, pResult) =>
+		{
+			if (pErr) return fCallback(pErr);
+			let tmpElements = pResult.elements || [];
+			// Mermaid notes carry HTML <br/> tags in their source text;
+			// mermaid-to-excalidraw passes them through verbatim instead
+			// of converting to newlines, so they render literally.
+			for (let i = 0; i < tmpElements.length; i++)
+			{
+				let tmpElement = tmpElements[i];
+				if (tmpElement && tmpElement.type === 'text' && typeof tmpElement.text === 'string')
+				{
+					tmpElement.text = tmpElement.text.replace(/<br\s*\/?>/gi, '\n');
+				}
+			}
+			// Build the scene with the style profile's appState.  Mermaid
+			// owns the structure, we own the canvas-level theme tokens.
+			let tmpAppState = Object.assign({}, (pProfile && pProfile.AppState) || {});
+			fCallback(null, {
+				type:     'excalidraw',
+				version:  2,
+				source:   'pict-renderer-graph/mermaid',
+				elements: tmpElements,
+				appState: tmpAppState,
+				files:    pResult.files    || {}
+			});
+		});
+	}
+};

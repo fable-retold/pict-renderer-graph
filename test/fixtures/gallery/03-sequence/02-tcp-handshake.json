@@ -1,0 +1,14 @@
+{
+	"_description": "TCP three-way handshake (RFC 793).",
+	"type": "sequence",
+	"title": "TCP handshake",
+	"actors": [
+		{ "id": "c", "label": "Client" },
+		{ "id": "s", "label": "Server" }
+	],
+	"messages": [
+		{ "from": "c", "to": "s", "label": "SYN (seq=x)" },
+		{ "from": "s", "to": "c", "label": "SYN+ACK (seq=y, ack=x+1)", "kind": "return" },
+		{ "from": "c", "to": "s", "label": "ACK (ack=y+1)" }
+	]
+}

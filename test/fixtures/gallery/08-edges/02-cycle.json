@@ -1,0 +1,15 @@
+{
+	"_description": "Edge case: a cycle in a flow diagram (topo sort falls back to insertion order).",
+	"type": "flow",
+	"title": "cycle (A→B→C→A)",
+	"nodes": [
+		{ "id": "a", "label": "A" },
+		{ "id": "b", "label": "B" },
+		{ "id": "c", "label": "C" }
+	],
+	"edges": [
+		{ "from": "a", "to": "b" },
+		{ "from": "b", "to": "c" },
+		{ "from": "c", "to": "a", "kind": "dashed" }
+	]
+}

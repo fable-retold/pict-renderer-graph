@@ -1,0 +1,22 @@
+{
+	"_description": "Publisher → topic → many subscribers (classic broadcast pattern).",
+	"type": "star",
+	"title": "pub/sub fanout",
+	"nodes": [
+		{ "id": "topic", "label": "Topic",     "kind": "ellipse", "accent": "accent" },
+		{ "id": "s1",    "label": "Inventory" },
+		{ "id": "s2",    "label": "Pricing" },
+		{ "id": "s3",    "label": "Email\nNotifier" },
+		{ "id": "s4",    "label": "Analytics" },
+		{ "id": "s5",    "label": "Audit Log" },
+		{ "id": "s6",    "label": "Webhook\nDispatcher" }
+	],
+	"edges": [
+		{ "from": "topic", "to": "s1" },
+		{ "from": "topic", "to": "s2" },
+		{ "from": "topic", "to": "s3" },
+		{ "from": "topic", "to": "s4" },
+		{ "from": "topic", "to": "s5", "kind": "dashed" },
+		{ "from": "topic", "to": "s6", "kind": "dashed" }
+	]
+}

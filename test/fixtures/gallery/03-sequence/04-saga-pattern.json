@@ -1,0 +1,24 @@
+{
+	"_description": "Saga pattern with compensating transactions on failure.",
+	"type": "sequence",
+	"title": "saga (book trip)",
+	"actors": [
+		{ "id": "client", "label": "Client" },
+		{ "id": "orch",   "label": "Orchestrator", "accent": "accent" },
+		{ "id": "flight", "label": "Flight" },
+		{ "id": "hotel",  "label": "Hotel" },
+		{ "id": "car",    "label": "Car Rental" }
+	],
+	"messages": [
+		{ "from": "client", "to": "orch",   "label": "book trip" },
+		{ "from": "orch",   "to": "flight", "label": "reserve" },
+		{ "from": "flight", "to": "orch",   "label": "ok", "kind": "return" },
+		{ "from": "orch",   "to": "hotel",  "label": "reserve" },
+		{ "from": "hotel",  "to": "orch",   "label": "ok", "kind": "return" },
+		{ "from": "orch",   "to": "car",    "label": "reserve" },
+		{ "from": "car",    "to": "orch",   "label": "FAIL", "kind": "return" },
+		{ "from": "orch",   "to": "hotel",  "label": "compensate\n(cancel)", "kind": "async" },
+		{ "from": "orch",   "to": "flight", "label": "compensate\n(cancel)", "kind": "async" },
+		{ "from": "orch",   "to": "client", "label": "rolled back", "kind": "return" }
+	]
+}

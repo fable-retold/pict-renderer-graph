@@ -1,0 +1,20 @@
+{
+	"_description": "Classic REST CRUD sequence: client → API → DB.",
+	"type": "sequence",
+	"title": "REST CRUD",
+	"actors": [
+		{ "id": "c",  "label": "Client" },
+		{ "id": "a",  "label": "API" },
+		{ "id": "db", "label": "Database" }
+	],
+	"messages": [
+		{ "from": "c",  "to": "a",  "label": "POST /widgets" },
+		{ "from": "a",  "to": "db", "label": "INSERT" },
+		{ "from": "db", "to": "a",  "label": "id=42", "kind": "return" },
+		{ "from": "a",  "to": "c",  "label": "201 Created", "kind": "return" },
+		{ "from": "c",  "to": "a",  "label": "GET /widgets/42" },
+		{ "from": "a",  "to": "db", "label": "SELECT" },
+		{ "from": "db", "to": "a",  "label": "row", "kind": "return" },
+		{ "from": "a",  "to": "c",  "label": "200 OK", "kind": "return" }
+	]
+}

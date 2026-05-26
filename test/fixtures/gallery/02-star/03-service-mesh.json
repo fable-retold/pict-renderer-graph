@@ -1,0 +1,24 @@
+{
+	"_description": "Service mesh: API gateway routing to many microservices.",
+	"type": "star",
+	"title": "service mesh",
+	"nodes": [
+		{ "id": "gw",   "label": "API\nGateway",  "kind": "rectangle", "accent": "accent" },
+		{ "id": "auth", "label": "auth" },
+		{ "id": "user", "label": "users" },
+		{ "id": "ord",  "label": "orders" },
+		{ "id": "pay",  "label": "payments" },
+		{ "id": "inv",  "label": "inventory" },
+		{ "id": "sh",   "label": "shipping" },
+		{ "id": "rev",  "label": "reviews" }
+	],
+	"edges": [
+		{ "from": "gw", "to": "auth", "label": "/auth" },
+		{ "from": "gw", "to": "user", "label": "/users" },
+		{ "from": "gw", "to": "ord",  "label": "/orders" },
+		{ "from": "gw", "to": "pay",  "label": "/payments" },
+		{ "from": "gw", "to": "inv",  "label": "/inventory" },
+		{ "from": "gw", "to": "sh",   "label": "/shipping" },
+		{ "from": "gw", "to": "rev",  "label": "/reviews" }
+	]
+}

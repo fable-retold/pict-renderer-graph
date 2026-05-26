@@ -1,0 +1,14 @@
+{
+	"_description": "Edge case: very long labels — does the auto-sizing keep up?",
+	"type": "flow",
+	"title": "long labels stress test",
+	"nodes": [
+		{ "id": "a", "label": "User submits the form via the website",  "kind": "rectangle" },
+		{ "id": "b", "label": "Backend validates the payload against the schema",  "kind": "rectangle" },
+		{ "id": "c", "label": "Notification service publishes to subscribers",  "kind": "rectangle", "accent": "accent" }
+	],
+	"edges": [
+		{ "from": "a", "to": "b", "label": "POST /api/v1/widgets" },
+		{ "from": "b", "to": "c", "label": "event published to message bus" }
+	]
+}

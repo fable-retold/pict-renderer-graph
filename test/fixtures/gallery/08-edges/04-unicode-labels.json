@@ -1,0 +1,16 @@
+{
+	"_description": "Edge case: Unicode in labels (Cyrillic, CJK, emoji, math symbols).",
+	"type": "flow",
+	"title": "unicode labels: 中文 / Кириллица / 日本語 / 🚀",
+	"nodes": [
+		{ "id": "user",   "label": "用户",       "kind": "ellipse" },
+		{ "id": "server", "label": "Сервер",     "kind": "rectangle" },
+		{ "id": "queue",  "label": "メッセージキュー", "kind": "rectangle" },
+		{ "id": "result", "label": "✅ Done",    "kind": "ellipse", "accent": "link" }
+	],
+	"edges": [
+		{ "from": "user",   "to": "server", "label": "→ запрос" },
+		{ "from": "server", "to": "queue",  "label": "公開" },
+		{ "from": "queue",  "to": "result", "label": "🎉" }
+	]
+}

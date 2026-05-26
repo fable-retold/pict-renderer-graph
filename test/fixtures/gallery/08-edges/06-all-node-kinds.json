@@ -1,0 +1,16 @@
+{
+	"_description": "Edge case: every node kind in one diagram.",
+	"type": "flow",
+	"title": "all node kinds",
+	"nodes": [
+		{ "id": "r", "label": "rectangle", "kind": "rectangle" },
+		{ "id": "e", "label": "ellipse",   "kind": "ellipse" },
+		{ "id": "d", "label": "diamond",   "kind": "diamond" },
+		{ "id": "n", "label": "note (sticky)", "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "r", "to": "e", "kind": "solid" },
+		{ "from": "e", "to": "d", "kind": "dashed" },
+		{ "from": "d", "to": "n", "kind": "dotted" }
+	]
+}

@@ -1,0 +1,24 @@
+{
+	"_description": "ETL data pipeline from multiple sources into a data warehouse.",
+	"type": "flow",
+	"title": "ETL pipeline",
+	"nodes": [
+		{ "id": "s1",     "label": "PostgreSQL",       "kind": "rectangle" },
+		{ "id": "s2",     "label": "MongoDB",          "kind": "rectangle" },
+		{ "id": "s3",     "label": "S3 logs",          "kind": "rectangle" },
+		{ "id": "extract","label": "Extract",          "kind": "rectangle", "accent": "link" },
+		{ "id": "trans",  "label": "Transform\n(dbt)", "kind": "rectangle", "accent": "link" },
+		{ "id": "load",   "label": "Load",             "kind": "rectangle", "accent": "link" },
+		{ "id": "wh",     "label": "Snowflake\nwarehouse", "kind": "rectangle", "accent": "accent" },
+		{ "id": "bi",     "label": "Looker / BI",      "kind": "ellipse" }
+	],
+	"edges": [
+		{ "from": "s1",      "to": "extract" },
+		{ "from": "s2",      "to": "extract" },
+		{ "from": "s3",      "to": "extract" },
+		{ "from": "extract", "to": "trans" },
+		{ "from": "trans",   "to": "load" },
+		{ "from": "load",    "to": "wh" },
+		{ "from": "wh",      "to": "bi",    "label": "query" }
+	]
+}

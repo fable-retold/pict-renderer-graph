@@ -1,0 +1,41 @@
+{
+	"_description": "Web stack mind map — frontend, backend, infra branches.",
+	"type": "mindmap",
+	"title": "web stack",
+	"root": "root",
+	"nodes": [
+		{ "id": "root",  "label": "Web App",     "kind": "ellipse", "accent": "accent" },
+		{ "id": "fe",    "label": "Frontend",    "kind": "ellipse", "accent": "link" },
+		{ "id": "be",    "label": "Backend",     "kind": "ellipse", "accent": "link" },
+		{ "id": "db",    "label": "Database",    "kind": "ellipse", "accent": "link" },
+		{ "id": "ops",   "label": "DevOps",      "kind": "ellipse", "accent": "link" },
+		{ "id": "react", "label": "React",       "kind": "ellipse" },
+		{ "id": "vue",   "label": "Vue",         "kind": "ellipse" },
+		{ "id": "svelte","label": "Svelte",      "kind": "ellipse" },
+		{ "id": "node",  "label": "Node.js",     "kind": "ellipse" },
+		{ "id": "go",    "label": "Go",          "kind": "ellipse" },
+		{ "id": "rust",  "label": "Rust",        "kind": "ellipse" },
+		{ "id": "pg",    "label": "Postgres",    "kind": "ellipse" },
+		{ "id": "mongo", "label": "Mongo",       "kind": "ellipse" },
+		{ "id": "redis", "label": "Redis",       "kind": "ellipse" },
+		{ "id": "docker","label": "Docker",      "kind": "ellipse" },
+		{ "id": "k8s",   "label": "K8s",         "kind": "ellipse" }
+	],
+	"edges": [
+		{ "from": "root", "to": "fe" },
+		{ "from": "root", "to": "be" },
+		{ "from": "root", "to": "db" },
+		{ "from": "root", "to": "ops" },
+		{ "from": "fe",   "to": "react" },
+		{ "from": "fe",   "to": "vue" },
+		{ "from": "fe",   "to": "svelte" },
+		{ "from": "be",   "to": "node" },
+		{ "from": "be",   "to": "go" },
+		{ "from": "be",   "to": "rust" },
+		{ "from": "db",   "to": "pg" },
+		{ "from": "db",   "to": "mongo" },
+		{ "from": "db",   "to": "redis" },
+		{ "from": "ops",  "to": "docker" },
+		{ "from": "ops",  "to": "k8s" }
+	]
+}

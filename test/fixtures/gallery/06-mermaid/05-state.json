@@ -1,0 +1,6 @@
+{
+	"_description": "Mermaid state diagram — state machine.",
+	"type": "mermaid",
+	"title": "mermaid state diagram",
+	"mermaid": "stateDiagram-v2\n    [*] --> Still\n    Still --> [*]\n    Still --> Moving\n    Moving --> Still\n    Moving --> Crash\n    Crash --> [*]"
+}

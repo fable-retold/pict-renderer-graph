@@ -1,0 +1,17 @@
+{
+	"_description": "Same graph in style: notebook (default).",
+	"type": "flow",
+	"title": "style: notebook",
+	"style": "notebook",
+	"nodes": [
+		{ "id": "a", "label": "Plan", "kind": "ellipse" },
+		{ "id": "b", "label": "Build", "kind": "rectangle" },
+		{ "id": "c", "label": "Ship", "kind": "rectangle", "accent": "accent" },
+		{ "id": "d", "label": "Iterate", "kind": "note", "background": "highlight" }
+	],
+	"edges": [
+		{ "from": "a", "to": "b" },
+		{ "from": "b", "to": "c", "label": "yes" },
+		{ "from": "c", "to": "d", "label": "feedback", "kind": "dashed" }
+	]
+}

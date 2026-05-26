@@ -1,0 +1,20 @@
+{
+	"_description": "Data warehouse star schema: fact table at center, dimension tables on spokes.",
+	"type": "star",
+	"title": "sales star schema",
+	"nodes": [
+		{ "id": "fact",  "label": "Fact:\nSales",       "kind": "rectangle", "accent": "accent" },
+		{ "id": "date",  "label": "Dim:\nDate" },
+		{ "id": "prod",  "label": "Dim:\nProduct" },
+		{ "id": "cust",  "label": "Dim:\nCustomer" },
+		{ "id": "store", "label": "Dim:\nStore" },
+		{ "id": "promo", "label": "Dim:\nPromotion" }
+	],
+	"edges": [
+		{ "from": "fact", "to": "date",  "label": "FK" },
+		{ "from": "fact", "to": "prod",  "label": "FK" },
+		{ "from": "fact", "to": "cust",  "label": "FK" },
+		{ "from": "fact", "to": "store", "label": "FK" },
+		{ "from": "fact", "to": "promo", "label": "FK", "kind": "dashed" }
+	]
+}
