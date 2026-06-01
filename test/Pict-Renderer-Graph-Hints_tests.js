@@ -87,4 +87,20 @@ suite('PictRendererGraph — cluster styling (post-layout)', function ()
 		Expect(tmpOut.find((e) => e.id === 'lblH')).to.equal(undefined);
 		Expect(tmpOut.find((e) => e.id === 'node')).to.not.equal(undefined);
 	});
+
+	test('softens a native subgraph frame (a rectangle enclosing >= 2 others)', function ()
+	{
+		// No hint clusters -- exercise only the geometric native-frame pass.
+		let tmpEls =
+		[
+			{ id: 'frame', type: 'rectangle', x: 0,  y: 0,   width: 300, height: 200, strokeColor: '#1B1F23', strokeStyle: 'solid' },
+			{ id: 'n1',    type: 'rectangle', x: 20, y: 20,  width: 80,  height: 50,  strokeColor: '#1B1F23' },
+			{ id: 'n2',    type: 'rectangle', x: 20, y: 100, width: 80,  height: 50,  strokeColor: '#1B1F23' }
+		];
+		applyClusterStyling(tmpEls, [], Profile);
+		let tmpFrame = tmpEls.find((e) => e.id === 'frame');
+		Expect(tmpFrame.strokeColor).to.equal(Profile.Palette.deemphasis);
+		Expect(tmpFrame.strokeStyle).to.equal('dashed');
+		Expect(tmpEls.find((e) => e.id === 'n1').strokeStyle).to.not.equal('dashed');
+	});
 });

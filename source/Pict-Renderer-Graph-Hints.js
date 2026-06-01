@@ -116,46 +116,77 @@ function applyLayoutHints(pSource, pHints)
  */
 function applyClusterStyling(pElements, pClusters, pProfile)
 {
-	if (!Array.isArray(pElements) || !Array.isArray(pClusters) || !pClusters.length)
-	{
-		return pElements;
-	}
+	if (!Array.isArray(pElements)) { return pElements; }
 	let tmpPalette = (pProfile && pProfile.Palette) || {};
 	let tmpDeemphasis = tmpPalette.deemphasis || '#8A7F72';
 	let tmpNorm = (pStr) => String(pStr == null ? '' : pStr).replace(/<[^>]+>/g, '').replace(/\s+/g, '').toLowerCase();
 
-	let tmpById = {};
-	for (let i = 0; i < pElements.length; i++) { tmpById[pElements[i].id] = pElements[i]; }
+	let tmpResult = pElements;
 
-	let tmpRemove = {};
-	for (let c = 0; c < pClusters.length; c++)
+	// (1) Hint clusters: quiet the visible frames, strip the invisible ones.
+	if (Array.isArray(pClusters) && pClusters.length)
 	{
-		let tmpCluster = pClusters[c];
-		let tmpLabelEl = null;
-		for (let i = 0; i < pElements.length; i++)
+		let tmpById = {};
+		for (let i = 0; i < pElements.length; i++) { tmpById[pElements[i].id] = pElements[i]; }
+		let tmpRemove = {};
+		for (let c = 0; c < pClusters.length; c++)
 		{
-			if (pElements[i].type === 'text' && tmpNorm(pElements[i].text) === tmpNorm(tmpCluster.label)) { tmpLabelEl = pElements[i]; break; }
+			let tmpCluster = pClusters[c];
+			let tmpLabelEl = null;
+			for (let i = 0; i < pElements.length; i++)
+			{
+				if (pElements[i].type === 'text' && tmpNorm(pElements[i].text) === tmpNorm(tmpCluster.label)) { tmpLabelEl = pElements[i]; break; }
+			}
+			if (!tmpLabelEl) { continue; }
+			let tmpFrame = tmpLabelEl.containerId ? tmpById[tmpLabelEl.containerId] : null;
+			if (tmpCluster.visible)
+			{
+				if (tmpFrame) { tmpFrame.strokeColor = tmpDeemphasis; tmpFrame.strokeStyle = 'dashed'; }
+				tmpLabelEl.strokeColor = tmpDeemphasis;
+			}
+			else
+			{
+				if (tmpFrame) { tmpRemove[tmpFrame.id] = true; }
+				tmpRemove[tmpLabelEl.id] = true;
+			}
 		}
-		if (!tmpLabelEl) { continue; }
-		let tmpFrame = tmpLabelEl.containerId ? tmpById[tmpLabelEl.containerId] : null;
+		if (Object.keys(tmpRemove).length) { tmpResult = pElements.filter((e) => !tmpRemove[e.id]); }
+	}
 
-		if (tmpCluster.visible)
+	// (2) Native mermaid subgraph frames.  A `subgraph` renders as a rectangle
+	// that geometrically encloses two or more other rectangles -- that's a
+	// container, not a node.  Soften the frame (and its title label) to a quiet
+	// dashed deemphasis so it reads as a grouping of equal-weight nodes.  This
+	// also handles nesting (each enclosing frame is softened independently).
+	let tmpRects = tmpResult.filter((e) => e.type === 'rectangle' && (typeof e.x === 'number') && e.width && e.height);
+	for (let f = 0; f < tmpRects.length; f++)
+	{
+		let tmpFrame = tmpRects[f];
+		let tmpEnclosed = 0;
+		for (let o = 0; o < tmpRects.length; o++)
 		{
-			if (tmpFrame) { tmpFrame.strokeColor = tmpDeemphasis; tmpFrame.strokeStyle = 'dashed'; }
-			tmpLabelEl.strokeColor = tmpDeemphasis;
+			let tmpOther = tmpRects[o];
+			if (tmpOther === tmpFrame) { continue; }
+			if (tmpOther.x >= tmpFrame.x && tmpOther.y >= tmpFrame.y
+				&& (tmpOther.x + tmpOther.width) <= (tmpFrame.x + tmpFrame.width)
+				&& (tmpOther.y + tmpOther.height) <= (tmpFrame.y + tmpFrame.height)
+				&& (tmpFrame.width * tmpFrame.height) > (tmpOther.width * tmpOther.height))
+			{
+				tmpEnclosed++;
+			}
 		}
-		else
+		if (tmpEnclosed >= 2)
 		{
-			if (tmpFrame) { tmpRemove[tmpFrame.id] = true; }
-			tmpRemove[tmpLabelEl.id] = true;
+			tmpFrame.strokeColor = tmpDeemphasis;
+			tmpFrame.strokeStyle = 'dashed';
+			for (let i = 0; i < tmpResult.length; i++)
+			{
+				if (tmpResult[i].type === 'text' && tmpResult[i].containerId === tmpFrame.id) { tmpResult[i].strokeColor = tmpDeemphasis; }
+			}
 		}
 	}
 
-	if (Object.keys(tmpRemove).length)
-	{
-		return pElements.filter((e) => !tmpRemove[e.id]);
-	}
-	return pElements;
+	return tmpResult;
 }
 
 module.exports = { applyLayoutHints: applyLayoutHints, applyClusterStyling: applyClusterStyling };
