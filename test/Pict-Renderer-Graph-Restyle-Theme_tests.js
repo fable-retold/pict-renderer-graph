@@ -12,7 +12,7 @@
 const Chai = require('chai');
 const Expect = Chai.expect;
 
-const { restyleElements, seedFor } = require('../source/Pict-Renderer-Graph-Restyle.js');
+const { restyleElements, seedFor, applyEmphasis, buildIdLabelMap } = require('../source/Pict-Renderer-Graph-Restyle.js');
 const { themeifySVG } = require('../source/Pict-Renderer-Graph-Theme-SVG.js');
 const Profile = require('pict-section-excalidraw/source/style-profiles/Notebook-Default.js');
 
@@ -108,5 +108,56 @@ suite('PictRendererGraph — themeify (palette -> CSS variables)', function ()
 	test('is a no-op without a profile palette', function ()
 	{
 		Expect(themeifySVG(_SVG, {})).to.equal(_SVG);
+	});
+});
+
+suite('PictRendererGraph — emphasis hints', function ()
+{
+	let _Mermaid = 'graph LR\n  user[User] --> api[API Gateway] --> db[(Database)]';
+
+	// Mirrors mermaid-to-excalidraw output: shapes with generated ids, text
+	// elements carrying the label + a containerId back to their shape.
+	function makeScene()
+	{
+		return [
+			{ id: 's_db',  type: 'rectangle', strokeColor: '#1B1F23', strokeWidth: 2 },
+			{ id: 't_db',  type: 'text', text: 'Database',    containerId: 's_db',  strokeColor: '#1B1F23' },
+			{ id: 's_api', type: 'rectangle', strokeColor: '#1B1F23', strokeWidth: 2 },
+			{ id: 't_api', type: 'text', text: 'API Gateway', containerId: 's_api', strokeColor: '#1B1F23' }
+		];
+	}
+
+	test('buildIdLabelMap parses node ids to their labels', function ()
+	{
+		let tmpMap = buildIdLabelMap(_Mermaid);
+		Expect(tmpMap.user).to.equal('User');
+		Expect(tmpMap.api).to.equal('API Gateway');
+		Expect(tmpMap.db).to.equal('Database');
+	});
+
+	test('accent + bold by node id colors text + shape and thickens the shape', function ()
+	{
+		let tmpEls = makeScene();
+		applyEmphasis(tmpEls, [ { node: 'db', accent: true, bold: true } ], _Mermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't_db').strokeColor).to.equal(Profile.Palette.accent);
+		Expect(tmpEls.find((e) => e.id === 's_db').strokeColor).to.equal(Profile.Palette.accent);
+		Expect(tmpEls.find((e) => e.id === 's_db').strokeWidth).to.be.greaterThan(2);
+	});
+
+	test('dim referenced by label uses the deemphasis palette', function ()
+	{
+		let tmpEls = makeScene();
+		applyEmphasis(tmpEls, [ { node: 'API Gateway', dim: true } ], _Mermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't_api').strokeColor).to.equal(Profile.Palette.deemphasis);
+	});
+
+	test('leaves unreferenced nodes and empty hint lists untouched', function ()
+	{
+		let tmpEls = makeScene();
+		applyEmphasis(tmpEls, [ { node: 'db', accent: true } ], _Mermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't_api').strokeColor).to.equal('#1B1F23');
+		let tmpEls2 = makeScene();
+		applyEmphasis(tmpEls2, [], _Mermaid, Profile);
+		Expect(tmpEls2.find((e) => e.id === 't_db').strokeColor).to.equal('#1B1F23');
 	});
 });

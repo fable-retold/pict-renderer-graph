@@ -30,10 +30,16 @@ const _Help = `pict-renderer-graph — headless Excalidraw renderer
 
 Usage:
   pict-renderer-graph render <input.json|-> <output.svg|.png|->  [options]
+  pict-renderer-graph build <dir|file.mmd>  [--style NAME] [--no-theme-variables]
   pict-renderer-graph serve [--port N] [--host H]
   pict-renderer-graph list-types
   pict-renderer-graph list-styles
   pict-renderer-graph --help
+
+build:
+  Renders every <name>.mmd under a path into <name>.svg + <name>.excalidraw,
+  next to the source. A sibling <name>.hints.json may set { style, emphasis,
+  restyle, themeVariables }. SVGs are theme-adaptive (CSS variables) by default.
 
 Options (render):
   --format svg|png        Output format (default: svg, or inferred from filename)
@@ -301,6 +307,124 @@ function cmdServe(pArgs)
 	});
 }
 
+// Find every *.mmd under a path (a single file, or a directory walked
+// recursively, skipping dotdirs + node_modules).
+function findMmdFiles(pPath)
+{
+	let tmpStat = libFs.statSync(pPath);
+	if (tmpStat.isFile())
+	{
+		return pPath.endsWith('.mmd') ? [ pPath ] : [];
+	}
+	let tmpOut = [];
+	(function walk(pDir)
+	{
+		for (let tmpEntry of libFs.readdirSync(pDir, { withFileTypes: true }))
+		{
+			if (tmpEntry.name === 'node_modules' || tmpEntry.name.startsWith('.')) { continue; }
+			let tmpFull = libPath.join(pDir, tmpEntry.name);
+			if (tmpEntry.isDirectory()) { walk(tmpFull); }
+			else if (tmpEntry.name.endsWith('.mmd')) { tmpOut.push(tmpFull); }
+		}
+	})(pPath);
+	tmpOut.sort();
+	return tmpOut;
+}
+
+// Render one <name>.mmd (+ optional <name>.hints.json) into <name>.svg +
+// <name>.excalidraw next to the source.
+function buildOne(pRenderer, pMmdPath, pArgs, fCallback)
+{
+	let tmpSource;
+	try { tmpSource = libFs.readFileSync(pMmdPath, 'utf8'); }
+	catch (pErr) { return fCallback(pErr); }
+
+	let tmpHints = {};
+	let tmpHintsPath = pMmdPath.replace(/\.mmd$/, '.hints.json');
+	if (libFs.existsSync(tmpHintsPath))
+	{
+		try { tmpHints = JSON.parse(libFs.readFileSync(tmpHintsPath, 'utf8')); }
+		catch (pErr) { return fCallback(new Error(tmpHintsPath + ': ' + pErr.message)); }
+	}
+
+	let tmpGraph =
+	{
+		type:    'mermaid',
+		mermaid: tmpSource,
+		style:   tmpHints.style || pArgs.flags.style || 'notebook'
+	};
+	if (Array.isArray(tmpHints.emphasis)) { tmpGraph.emphasis = tmpHints.emphasis; }
+	if (tmpHints.restyle === false)       { tmpGraph.restyle = false; }
+
+	// Docs want theme-adaptive output by default; opt out per-diagram with
+	// "themeVariables": false in the hints, or globally with --no-theme-variables.
+	let tmpThemeVariables = (tmpHints.themeVariables !== false) && (pArgs.flags['theme-variables'] !== false);
+
+	pRenderer.render(tmpGraph, { format: 'svg', includeSource: true, themeVariables: tmpThemeVariables }, (pErr, pOut) =>
+	{
+		if (pErr) { return fCallback(pErr); }
+		let tmpSvgPath     = pMmdPath.replace(/\.mmd$/, '.svg');
+		let tmpExcaliPath  = pMmdPath.replace(/\.mmd$/, '.excalidraw');
+		try
+		{
+			libFs.writeFileSync(tmpSvgPath, pOut.svg);
+			libFs.writeFileSync(tmpExcaliPath, JSON.stringify(pOut.scene, null, '\t'));
+		}
+		catch (pWriteErr) { return fCallback(pWriteErr); }
+		process.stderr.write('  ' + libPath.basename(pMmdPath) + ' -> ' + libPath.basename(tmpSvgPath) +
+			' + .excalidraw  (' + pOut.scene.elements.length + ' elements' +
+			(tmpGraph.emphasis ? ', ' + tmpGraph.emphasis.length + ' emphasis' : '') + ')\n');
+		fCallback(null);
+	});
+}
+
+function cmdBuild(pArgs)
+{
+	let tmpPath = pArgs._[1];
+	if (!tmpPath)
+	{
+		process.stderr.write('usage: pict-renderer-graph build <dir|file.mmd> [--style NAME] [--no-theme-variables]\n');
+		process.exit(2);
+	}
+	let tmpFiles;
+	try { tmpFiles = findMmdFiles(tmpPath); }
+	catch (pErr) { process.stderr.write('Error scanning ' + tmpPath + ': ' + pErr.message + '\n'); process.exit(3); }
+
+	if (!tmpFiles.length)
+	{
+		process.stderr.write('[pict-renderer-graph] build: no .mmd files found under ' + tmpPath + '\n');
+		process.exit(0);
+	}
+
+	let tmpRenderer = new libPictRendererGraph(new libFable());
+	tmpRenderer.initialize((pInitErr) =>
+	{
+		if (pInitErr)
+		{
+			process.stderr.write('Error initializing renderer: ' + pInitErr.message + '\n');
+			process.exit(4);
+		}
+		process.stderr.write('[pict-renderer-graph] build: ' + tmpFiles.length + ' diagram(s)\n');
+		let tmpIndex = 0, tmpOk = 0, tmpFail = 0;
+		let tmpNext = () =>
+		{
+			if (tmpIndex >= tmpFiles.length)
+			{
+				process.stderr.write('[pict-renderer-graph] build done: ' + tmpOk + ' ok, ' + tmpFail + ' failed\n');
+				return tmpRenderer.shutdown(() => process.exit(tmpFail ? 8 : 0));
+			}
+			let tmpMmd = tmpFiles[tmpIndex++];
+			buildOne(tmpRenderer, tmpMmd, pArgs, (pErr) =>
+			{
+				if (pErr) { tmpFail++; process.stderr.write('  FAILED ' + libPath.basename(tmpMmd) + ': ' + pErr.message + '\n'); }
+				else { tmpOk++; }
+				tmpNext();
+			});
+		};
+		tmpNext();
+	});
+}
+
 function cmdHelp() { process.stdout.write(_Help); }
 
 // ---- Main ------------------------------------------------------------
@@ -316,6 +440,7 @@ if (_args.flags.help || !_subcommand)
 switch (_subcommand)
 {
 	case 'render':       cmdRender(_args);     break;
+	case 'build':        cmdBuild(_args);      break;
 	case 'serve':        cmdServe(_args);      break;
 	case 'list-types':   cmdListTypes();       process.exit(0); break;
 	case 'list-styles':  cmdListStyles();      process.exit(0); break;

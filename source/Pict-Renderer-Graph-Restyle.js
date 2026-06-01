@@ -144,4 +144,97 @@ function restyleElements(pElements, pProfile)
 	return pElements;
 }
 
-module.exports = { restyleElements: restyleElements, seedFor: seedFor, fontFamilyIndex: fontFamilyIndex };
+/**
+ * Parse a mermaid source into a node-id -> label map, so an emphasis hint can
+ * name a node by its short id (db) or its displayed label (Database).  Matches
+ * the common node declarations: id[label], id(label), id([label]), id[(label)],
+ * id{label}, id((label)).  Nodes that only appear in edges (no declared label)
+ * are simply their own id and are matched by id directly.
+ */
+function buildIdLabelMap(pMermaid)
+{
+	let tmpMap = {};
+	if (typeof pMermaid !== 'string') { return tmpMap; }
+	let tmpRegExp = /\b([A-Za-z0-9_]+)\s*[\[\(\{]+([^\]\)\}|]+?)[\]\)\}]+/g;
+	let tmpMatch;
+	while ((tmpMatch = tmpRegExp.exec(pMermaid)))
+	{
+		let tmpId    = tmpMatch[1];
+		let tmpLabel = tmpMatch[2].replace(/^["']|["']$/g, '').trim();
+		if (tmpLabel) { tmpMap[tmpId] = tmpLabel; }
+	}
+	return tmpMap;
+}
+
+/**
+ * Apply emphasis hints to a restyled scene.  Each hint names a node (by id or
+ * label) and a treatment: accent (palette accent stroke), dim (palette
+ * deemphasis stroke), bold (thicker shape outline).  Matching is by the node's
+ * label text -- the only stable identifier in mermaid-to-excalidraw output --
+ * resolved through buildIdLabelMap so short ids work too.  Geometry is never
+ * touched (no overlap risk).
+ *
+ * @param {Array}  pElements - excalidraw elements (mutated)
+ * @param {Array}  pEmphasis - [ { node|nodes, accent?, dim?, bold? } ]
+ * @param {string} pMermaid  - the mermaid source (for id -> label)
+ * @param {object} pProfile  - resolved style profile (palette)
+ * @returns {Array} the same array
+ */
+function applyEmphasis(pElements, pEmphasis, pMermaid, pProfile)
+{
+	if (!Array.isArray(pElements) || !Array.isArray(pEmphasis) || !pEmphasis.length)
+	{
+		return pElements;
+	}
+	let tmpPalette = (pProfile && pProfile.Palette) || {};
+	let tmpAccent  = tmpPalette.accent || '#C9602F';
+	let tmpDim     = tmpPalette.deemphasis || '#8A7F72';
+	let tmpStrokeWidth = (pProfile && pProfile.StrokeWidth) || 2;
+
+	let tmpIdLabel = buildIdLabelMap(pMermaid);
+	let tmpNorm = (pStr) => String(pStr == null ? '' : pStr).trim().toLowerCase();
+
+	let tmpTextByLabel = {};
+	let tmpById = {};
+	for (let i = 0; i < pElements.length; i++)
+	{
+		let tmpEl = pElements[i];
+		tmpById[tmpEl.id] = tmpEl;
+		if (tmpEl.type === 'text') { tmpTextByLabel[tmpNorm(tmpEl.text)] = tmpEl; }
+	}
+
+	for (let h = 0; h < pEmphasis.length; h++)
+	{
+		let tmpHint  = pEmphasis[h] || {};
+		let tmpNodes = Array.isArray(tmpHint.nodes) ? tmpHint.nodes : (tmpHint.node ? [ tmpHint.node ] : []);
+		for (let n = 0; n < tmpNodes.length; n++)
+		{
+			let tmpRef    = tmpNodes[n];
+			let tmpLabel  = tmpIdLabel[tmpRef] || tmpRef;
+			let tmpTextEl = tmpTextByLabel[tmpNorm(tmpLabel)] || tmpTextByLabel[tmpNorm(tmpRef)];
+			if (!tmpTextEl) { continue; }
+			let tmpShapeEl = tmpTextEl.containerId ? tmpById[tmpTextEl.containerId] : null;
+			let tmpTargets = tmpShapeEl ? [ tmpTextEl, tmpShapeEl ] : [ tmpTextEl ];
+			for (let t = 0; t < tmpTargets.length; t++)
+			{
+				let tmpTarget = tmpTargets[t];
+				if (tmpHint.dim)         { tmpTarget.strokeColor = tmpDim; }
+				else if (tmpHint.accent) { tmpTarget.strokeColor = tmpAccent; }
+				if (tmpHint.bold && tmpTarget.type !== 'text')
+				{
+					tmpTarget.strokeWidth = tmpStrokeWidth + 1.5;
+				}
+			}
+		}
+	}
+	return pElements;
+}
+
+module.exports =
+{
+	restyleElements: restyleElements,
+	applyEmphasis:   applyEmphasis,
+	buildIdLabelMap: buildIdLabelMap,
+	seedFor:         seedFor,
+	fontFamilyIndex: fontFamilyIndex
+};

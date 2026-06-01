@@ -79,6 +79,12 @@ module.exports =
 			{
 				libRestyle.restyleElements(tmpElements, pProfile);
 			}
+			// Emphasis hints (accent / dim / bold a node by id or label) ride
+			// on the graph input; applied after the base restyle so they win.
+			if (Array.isArray(pGraph.emphasis) && pGraph.emphasis.length)
+			{
+				libRestyle.applyEmphasis(tmpElements, pGraph.emphasis, pGraph.mermaid, pProfile);
+			}
 
 			// Build the scene with the style profile's appState.  Mermaid
 			// owns the structure, we own the canvas-level theme tokens.
