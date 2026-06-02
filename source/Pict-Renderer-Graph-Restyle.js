@@ -467,12 +467,140 @@ function rerouteArrows(pElements, pProfile)
 	return pElements;
 }
 
+// Squash a label / rendered text to a whitespace + tag free key, so a
+// rendered text element matches its source label regardless of wrapping.
+function _squashKey(pStr)
+{
+	return String(pStr == null ? '' : pStr).replace(/<[^>]+>/g, '').replace(/\s+/g, '').toLowerCase();
+}
+
+/**
+ * Give multi-line box labels a heading hierarchy: the title (the first <br/>
+ * segment the author wrote) stays full size while the detail line(s) below it
+ * shrink, so the heading reads as a heading. Excalidraw has no per-line styling
+ * (one font + size per text element) and Excalifont has no bold weight, so the
+ * title is promoted into its own text element -- unbound and centered across
+ * the box -- stacked above a smaller detail element (the re-purposed original).
+ *
+ * A first segment counts as a title only when the author clearly separated a
+ * heading from a description: either the label has exactly two segments, or it
+ * has more but the first is a short (<= 2 word) name. That distinguishes
+ * "FoxHound / (Query DSL) / methods" (FoxHound is a title) from a co-equal
+ * bullet list like "Behavior injection hooks / Dynamic filtering / Bulk ops"
+ * (no title -- left as one block).
+ *
+ * Runs after applyEmphasis so the promoted title inherits any accent color.
+ *
+ * @param {Array}  pElements - excalidraw elements (mutated; titles appended)
+ * @param {string} pMermaid  - mermaid source (for the <br/> segment structure)
+ * @param {object} pProfile  - resolved style profile (for the title seed)
+ * @returns {Array} the same array
+ */
+function splitTitleLines(pElements, pMermaid, pProfile)
+{
+	if (!Array.isArray(pElements)) { return pElements; }
+	let tmpMap = _labelSegmentsMap(pMermaid);
+
+	let tmpById = {};
+	for (let i = 0; i < pElements.length; i++)
+	{
+		if (pElements[i] && pElements[i].id) { tmpById[pElements[i].id] = pElements[i]; }
+	}
+
+	let tmpAppend = [];
+	for (let i = 0; i < pElements.length; i++)
+	{
+		let tmpText = pElements[i];
+		if (!tmpText || tmpText.type !== 'text' || typeof tmpText.text !== 'string') { continue; }
+		if (!tmpText.containerId) { continue; }
+		let tmpBox = tmpById[tmpText.containerId];
+		if (!tmpBox) { continue; }
+
+		let tmpLines = tmpText.text.split('\n');
+		if (tmpLines.length < 2) { continue; }
+
+		let tmpSegments = tmpMap[_squashKey(tmpText.text)];
+		if (!tmpSegments || tmpSegments.length < 2) { continue; }
+
+		// Heading vs. the first item of a co-equal list?
+		let tmpTitleWords = tmpSegments[0].trim().split(/\s+/).length;
+		let tmpIsTitle = (tmpSegments.length === 2) || (tmpTitleWords <= 2);
+		if (!tmpIsTitle) { continue; }
+
+		// How many rendered lines does the title segment occupy? (Usually one;
+		// reconstruct so a title that itself wrapped still splits cleanly.)
+		let tmpTitleKey = _squashKey(tmpSegments[0]);
+		let tmpAccum = '';
+		let tmpK = 0;
+		while (tmpK < tmpLines.length)
+		{
+			tmpAccum += _squashKey(tmpLines[tmpK]);
+			tmpK++;
+			if (tmpAccum === tmpTitleKey) { break; }
+			if (tmpAccum.length >= tmpTitleKey.length) { tmpK = 0; break; }
+		}
+		if (tmpK < 1 || tmpK >= tmpLines.length) { continue; }   // no clean title/detail split
+
+		let tmpTitle  = tmpLines.slice(0, tmpK).join('\n');
+		let tmpDetail = tmpLines.slice(tmpK).join('\n');
+
+		let tmpLineH      = tmpText.lineHeight || 1.25;
+		let tmpTitleSize  = tmpText.fontSize || 16;
+		let tmpDetailSize = Math.max(10, Math.round(tmpTitleSize * 0.82));
+
+		let tmpTitleH  = tmpK * tmpTitleSize * tmpLineH;
+		let tmpDetailH = (tmpLines.length - tmpK) * tmpDetailSize * tmpLineH;
+		let tmpTotalH  = tmpTitleH + tmpDetailH;
+		let tmpTop     = tmpBox.y + (tmpBox.height - tmpTotalH) / 2;
+
+		// Title: a new, box-centered element at full size, above the detail.
+		let tmpTitleEl = Object.assign({}, tmpText);
+		tmpTitleEl.id            = tmpText.id + '_title';
+		tmpTitleEl.text          = tmpTitle;
+		tmpTitleEl.originalText  = tmpTitle;
+		tmpTitleEl.fontSize      = tmpTitleSize;
+		tmpTitleEl.containerId   = null;
+		tmpTitleEl.textAlign     = 'center';
+		tmpTitleEl.verticalAlign = 'top';
+		tmpTitleEl.x             = tmpBox.x;
+		tmpTitleEl.y             = tmpTop;
+		tmpTitleEl.width         = tmpBox.width;
+		tmpTitleEl.height        = tmpTitleH;
+		tmpTitleEl.seed          = seedFor(pProfile, 'title:' + tmpText.id);
+		tmpTitleEl.boundElements = null;
+		tmpAppend.push(tmpTitleEl);
+
+		// Detail: re-purpose the original element, shrunk, below the title.
+		tmpText.text          = tmpDetail;
+		tmpText.originalText  = tmpDetail;
+		tmpText.fontSize      = tmpDetailSize;
+		tmpText.containerId   = null;
+		tmpText.textAlign     = 'center';
+		tmpText.verticalAlign = 'top';
+		tmpText.x             = tmpBox.x;
+		tmpText.y             = tmpTop + tmpTitleH;
+		tmpText.width         = tmpBox.width;
+		tmpText.height        = tmpDetailH;
+
+		// Drop the container's text binding so it no longer re-centers the
+		// (now detail-only) element over the whole box. The arrow bindings stay.
+		if (Array.isArray(tmpBox.boundElements))
+		{
+			tmpBox.boundElements = tmpBox.boundElements.filter((b) => !(b && b.type === 'text'));
+		}
+	}
+
+	for (let i = 0; i < tmpAppend.length; i++) { pElements.push(tmpAppend[i]); }
+	return pElements;
+}
+
 module.exports =
 {
 	restyleElements: restyleElements,
 	applyEmphasis:   applyEmphasis,
 	reflowText:      reflowText,
 	rerouteArrows:   rerouteArrows,
+	splitTitleLines: splitTitleLines,
 	buildIdLabelMap: buildIdLabelMap,
 	seedFor:         seedFor,
 	fontFamilyIndex: fontFamilyIndex

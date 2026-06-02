@@ -12,7 +12,7 @@
 const Chai = require('chai');
 const Expect = Chai.expect;
 
-const { restyleElements, seedFor, applyEmphasis, buildIdLabelMap, reflowText, rerouteArrows } = require('../source/Pict-Renderer-Graph-Restyle.js');
+const { restyleElements, seedFor, applyEmphasis, buildIdLabelMap, reflowText, rerouteArrows, splitTitleLines } = require('../source/Pict-Renderer-Graph-Restyle.js');
 const { themeifySVG } = require('../source/Pict-Renderer-Graph-Theme-SVG.js');
 const Profile = require('pict-section-excalidraw/source/style-profiles/Notebook-Default.js');
 
@@ -293,5 +293,77 @@ suite('PictRendererGraph — arrow re-routing (perpendicular landings)', functio
 		];
 		rerouteArrows(tmpEls, null);
 		Expect(tmpEls[0].points.length).to.equal(3);
+	});
+});
+
+suite('PictRendererGraph — title hierarchy (split heading from detail)', function ()
+{
+	// A box label bound to its container, the way mermaid-to-excalidraw emits it.
+	function makeLabel(pText)
+	{
+		return [
+			{ id: 's1', type: 'rectangle', x: 0, y: 0, width: 200, height: 100, boundElements: [ { type: 'text', id: 't1' }, { type: 'arrow', id: 'a1' } ] },
+			{ id: 't1', type: 'text', text: pText, containerId: 's1', fontSize: 16, lineHeight: 1.25, strokeColor: '#1B1F23', textAlign: 'center', verticalAlign: 'middle', x: 20, y: 30, width: 160, height: 40 }
+		];
+	}
+
+	test('promotes a two-segment title to a full-size element above smaller detail', function ()
+	{
+		let tmpMermaid = 'graph TB\n  s["Fable-Settings<br/>.settings"]';
+		let tmpEls = makeLabel('Fable-Settings\n.settings');
+		splitTitleLines(tmpEls, tmpMermaid, Profile);
+		let tmpTitle  = tmpEls.find((e) => e.id === 't1_title');
+		let tmpDetail = tmpEls.find((e) => e.id === 't1');
+		Expect(tmpTitle).to.not.equal(undefined);
+		Expect(tmpTitle.text).to.equal('Fable-Settings');
+		Expect(tmpDetail.text).to.equal('.settings');
+		Expect(tmpTitle.fontSize).to.be.greaterThan(tmpDetail.fontSize);   // title larger
+		Expect(tmpTitle.y).to.be.lessThan(tmpDetail.y);                    // title sits above
+		Expect(tmpTitle.containerId).to.equal(null);                       // unbound (centered manually)
+		Expect(tmpDetail.containerId).to.equal(null);
+	});
+
+	test('drops only the text binding from the container, keeping arrow bindings', function ()
+	{
+		let tmpEls = makeLabel('Fable-Log\n.log');
+		splitTitleLines(tmpEls, 'graph TB\n  s["Fable-Log<br/>.log"]', Profile);
+		let tmpBox = tmpEls.find((e) => e.id === 's1');
+		Expect(tmpBox.boundElements.some((b) => b.type === 'text')).to.equal(false);
+		Expect(tmpBox.boundElements.some((b) => b.type === 'arrow')).to.equal(true);
+	});
+
+	test('treats a short first segment in a 3-part label as a title (FoxHound)', function ()
+	{
+		let tmpMermaid = 'graph TB\n  s["FoxHound<br/>(Query DSL)<br/>.addFilter()"]';
+		let tmpEls = makeLabel('FoxHound\n(Query DSL)\n.addFilter()');
+		splitTitleLines(tmpEls, tmpMermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't1_title').text).to.equal('FoxHound');
+		Expect(tmpEls.find((e) => e.id === 't1').text).to.equal('(Query DSL)\n.addFilter()');
+	});
+
+	test('leaves a co-equal bullet list (long first segment) as one block', function ()
+	{
+		let tmpMermaid = 'graph TB\n  b["Behavior injection hooks<br/>Dynamic filtering<br/>Bulk operations"]';
+		let tmpEls = makeLabel('Behavior injection hooks\nDynamic filtering\nBulk operations');
+		splitTitleLines(tmpEls, tmpMermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't1_title')).to.equal(undefined);
+		Expect(tmpEls.filter((e) => e.type === 'text').length).to.equal(1);
+	});
+
+	test('promoted title inherits the (accented) detail stroke color', function ()
+	{
+		let tmpMermaid = 'graph TB\n  s["FoxHound<br/>(Query DSL)<br/>.addFilter()"]';
+		let tmpEls = makeLabel('FoxHound\n(Query DSL)\n.addFilter()');
+		tmpEls.find((e) => e.id === 't1').strokeColor = '#C9602F';   // emphasis ran first
+		splitTitleLines(tmpEls, tmpMermaid, Profile);
+		Expect(tmpEls.find((e) => e.id === 't1_title').strokeColor).to.equal('#C9602F');
+	});
+
+	test('leaves a single-line label bound and unsplit', function ()
+	{
+		let tmpEls = makeLabel('Service Provider Base');
+		splitTitleLines(tmpEls, 'graph TB\n  s["Service Provider Base"]', Profile);
+		Expect(tmpEls.find((e) => e.id === 't1_title')).to.equal(undefined);
+		Expect(tmpEls.find((e) => e.id === 't1').containerId).to.equal('s1');
 	});
 });

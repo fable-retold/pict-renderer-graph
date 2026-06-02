@@ -108,6 +108,13 @@ module.exports =
 			{
 				libRestyle.applyEmphasis(tmpElements, pGraph.emphasis, pGraph.mermaid, pProfile);
 			}
+			// Give multi-line labels a heading hierarchy: promote the title
+			// segment into its own full-size element above smaller detail
+			// lines. After emphasis so a promoted title keeps its accent color.
+			if (pGraph.restyle !== false)
+			{
+				libRestyle.splitTitleLines(tmpElements, pGraph.mermaid, pProfile);
+			}
 
 			// Build the scene with the style profile's appState.  Mermaid
 			// owns the structure, we own the canvas-level theme tokens.
