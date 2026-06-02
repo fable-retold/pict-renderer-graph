@@ -12,7 +12,7 @@
 const Chai = require('chai');
 const Expect = Chai.expect;
 
-const { restyleElements, seedFor, applyEmphasis, buildIdLabelMap, reflowText } = require('../source/Pict-Renderer-Graph-Restyle.js');
+const { restyleElements, seedFor, applyEmphasis, buildIdLabelMap, reflowText, rerouteArrows } = require('../source/Pict-Renderer-Graph-Restyle.js');
 const { themeifySVG } = require('../source/Pict-Renderer-Graph-Theme-SVG.js');
 const Profile = require('pict-section-excalidraw/source/style-profiles/Notebook-Default.js');
 
@@ -202,5 +202,78 @@ suite('PictRendererGraph — text re-flow (repair mermaid wrap)', function ()
 		let tmpEls = [ { id: 't1', type: 'text', text: 'Totally unrelated text' } ];
 		reflowText(tmpEls, 'graph TB\n  A["Something else"]');
 		Expect(tmpEls[0].text).to.equal('Totally unrelated text');
+	});
+});
+
+suite('PictRendererGraph — arrow re-routing (perpendicular landings)', function ()
+{
+	// Two boxes side by side (A on the left, B on the right) and a connector
+	// that mermaid drew as a straight 2-point line A.right -> B.left.
+	function makeHorizontalScene()
+	{
+		return [
+			{ id: 's_a', type: 'rectangle', x: 0,   y: 0, width: 100, height: 60 },
+			{ id: 's_b', type: 'rectangle', x: 200, y: 0, width: 100, height: 60 },
+			{
+				id: 'e1', type: 'arrow', x: 100, y: 30,
+				points: [ [ 0, 0 ], [ 100, 0 ] ],
+				startBinding: { elementId: 's_a' }, endBinding: { elementId: 's_b' }
+			}
+		];
+	}
+
+	test('adds a perpendicular departure + approach stub (4 waypoints, square landing)', function ()
+	{
+		let tmpEls = makeHorizontalScene();
+		rerouteArrows(tmpEls, null);
+		let tmpArrow = tmpEls.find((e) => e.id === 'e1');
+		Expect(tmpArrow.points.length).to.equal(4);
+		// First waypoint is the (unchanged) start anchor.
+		Expect(tmpArrow.points[0][0]).to.equal(0);
+		Expect(tmpArrow.points[0][1]).to.equal(0);
+		// Departure leaves A's right edge horizontally (x grows, y flat).
+		Expect(tmpArrow.points[1][0]).to.be.greaterThan(0);
+		Expect(tmpArrow.points[1][1]).to.equal(0);
+		// Approach reaches B's left edge horizontally -- last segment is flat in
+		// y, so the arrowhead meets the vertical edge square-on (no swoop).
+		Expect(tmpArrow.points[3][1]).to.equal(tmpArrow.points[2][1]);
+		// End anchor lands at B's left-edge midpoint (abs 200,30 -> rel 100,0).
+		Expect(tmpArrow.points[3][0]).to.equal(100);
+		Expect(tmpArrow.points[3][1]).to.equal(0);
+	});
+
+	test('draws the re-routed connector as a smooth (type 2) curve', function ()
+	{
+		let tmpEls = makeHorizontalScene();
+		rerouteArrows(tmpEls, null);
+		Expect(tmpEls.find((e) => e.id === 'e1').roundness).to.deep.equal({ type: 2 });
+	});
+
+	test('lands perpendicular on a top edge for a vertical (stacked) connector', function ()
+	{
+		let tmpEls = [
+			{ id: 's_a', type: 'rectangle', x: 0, y: 0,   width: 100, height: 60 },
+			{ id: 's_b', type: 'rectangle', x: 0, y: 200, width: 100, height: 60 },
+			{
+				id: 'e1', type: 'arrow', x: 50, y: 60,
+				points: [ [ 0, 0 ], [ 0, 140 ] ],
+				startBinding: { elementId: 's_a' }, endBinding: { elementId: 's_b' }
+			}
+		];
+		rerouteArrows(tmpEls, null);
+		let tmpArrow = tmpEls.find((e) => e.id === 'e1');
+		// Last segment is flat in x (vertical), so it meets B's top edge square-on.
+		Expect(tmpArrow.points[3][0]).to.equal(tmpArrow.points[2][0]);
+		// ...and continues downward into the edge (end is below the approach).
+		Expect(tmpArrow.points[3][1]).to.be.greaterThan(tmpArrow.points[2][1]);
+	});
+
+	test('leaves an unbound connector untouched', function ()
+	{
+		let tmpEls = [
+			{ id: 'e1', type: 'arrow', x: 0, y: 0, points: [ [ 0, 0 ], [ 50, 20 ], [ 100, 0 ] ] }
+		];
+		rerouteArrows(tmpEls, null);
+		Expect(tmpEls[0].points.length).to.equal(3);
 	});
 });

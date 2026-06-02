@@ -138,20 +138,9 @@ function restyleElements(pElements, pProfile)
 				tmpElement.strokeWidth = tmpStrokeWidth;
 				tmpElement.strokeStyle = tmpStrokeStyle;
 				// Connectors read cleaner without wobble -- the hand-drawn feel
-				// lives in the shapes; jittery arrows just look noisy.
+				// lives in the shapes; jittery arrows just look noisy. The path
+				// itself (perpendicular landings) is repaired by rerouteArrows.
 				tmpElement.roughness   = 0;
-				// Drop mermaid's intermediate curve points so a connector goes
-				// straight to its target instead of swooping past and curling
-				// back into the edge at a bad angle. The start/end bindings
-				// re-clip it to the box edges on render.
-				if (Array.isArray(tmpElement.points) && tmpElement.points.length > 2)
-				{
-					let tmpFirst = tmpElement.points[0];
-					let tmpLast  = tmpElement.points[tmpElement.points.length - 1];
-					tmpElement.points = [ tmpFirst, tmpLast ];
-					tmpElement.width  = Math.abs(tmpLast[0] - tmpFirst[0]);
-					tmpElement.height = Math.abs(tmpLast[1] - tmpFirst[1]);
-				}
 				tmpElement.seed        = seedFor(pProfile, 'edge:' + tmpKey);
 				break;
 
@@ -349,11 +338,133 @@ function reflowText(pElements, pMermaid)
 	return pElements;
 }
 
+// Outward unit normals for each box edge -- the same notion as
+// pict-section-flow's GeometryProvider.sideDirection.
+const _SideRight  = { dx: 1,  dy: 0 };
+const _SideLeft   = { dx: -1, dy: 0 };
+const _SideTop    = { dx: 0,  dy: -1 };
+const _SideBottom = { dx: 0,  dy: 1 };
+
+/**
+ * Infer which edge of a box an anchor point sits on and return that edge's
+ * outward normal. Mermaid attaches connector endpoints at (or just outside) an
+ * edge midpoint, so the nearest edge is the side the connector should depart /
+ * approach along.
+ */
+function _inferSide(pX, pY, pBox)
+{
+	let tmpX = (typeof pBox.x === 'number') ? pBox.x : 0;
+	let tmpY = (typeof pBox.y === 'number') ? pBox.y : 0;
+	let tmpW = pBox.width  || 0;
+	let tmpH = pBox.height || 0;
+	let tmpToLeft   = Math.abs(pX - tmpX);
+	let tmpToRight  = Math.abs(pX - (tmpX + tmpW));
+	let tmpToTop    = Math.abs(pY - tmpY);
+	let tmpToBottom = Math.abs(pY - (tmpY + tmpH));
+	let tmpMin = Math.min(tmpToLeft, tmpToRight, tmpToTop, tmpToBottom);
+	if (tmpMin === tmpToRight)  { return _SideRight; }
+	if (tmpMin === tmpToLeft)   { return _SideLeft; }
+	if (tmpMin === tmpToBottom) { return _SideBottom; }
+	return _SideTop;
+}
+
+/**
+ * Re-route bound connectors so they leave and enter their boxes perpendicular
+ * to the edge -- the clean-landing trick pict-section-flow's PathGenerator uses
+ * (a short departure/approach stub along each side's outward normal, then a
+ * smooth curve between). This replaces mermaid-to-excalidraw's dagre spline --
+ * whose tail often curls into the target at a steep, swooping angle -- with
+ * start -> depart -> approach -> end drawn as a rounded (type 2) curve, so the
+ * arrowhead always meets its box square-on.
+ *
+ * Mermaid still owns WHERE each endpoint attaches (we keep its first/last
+ * points and the bindings); we only fix the ANGLE of departure and arrival and
+ * the shape of the path between. Excalidraw's SVG export draws a linear
+ * element straight from its `points`, so these waypoints are exactly what
+ * renders; the retained bindings keep the scene hand-editable.
+ *
+ * @param {Array}  pElements - excalidraw elements (mutated in place)
+ * @param {object} pProfile  - resolved style profile (reserved; parity with siblings)
+ * @returns {Array} the same array
+ */
+function rerouteArrows(pElements, pProfile)
+{
+	if (!Array.isArray(pElements)) { return pElements; }
+
+	let tmpById = {};
+	for (let i = 0; i < pElements.length; i++)
+	{
+		if (pElements[i] && pElements[i].id) { tmpById[pElements[i].id] = pElements[i]; }
+	}
+
+	for (let i = 0; i < pElements.length; i++)
+	{
+		let tmpArrow = pElements[i];
+		if (!tmpArrow || (tmpArrow.type !== 'arrow' && tmpArrow.type !== 'line')) { continue; }
+		if (!Array.isArray(tmpArrow.points) || tmpArrow.points.length < 2) { continue; }
+
+		let tmpStartId = tmpArrow.startBinding && tmpArrow.startBinding.elementId;
+		let tmpEndId   = tmpArrow.endBinding   && tmpArrow.endBinding.elementId;
+		let tmpBoxA = tmpStartId ? tmpById[tmpStartId] : null;
+		let tmpBoxB = tmpEndId   ? tmpById[tmpEndId]   : null;
+		// Need both ends bound to a distinct box to know the edges to land on;
+		// unbound connectors and self-loops are left exactly as mermaid drew them.
+		if (!tmpBoxA || !tmpBoxB || tmpBoxA === tmpBoxB) { continue; }
+
+		let tmpX = tmpArrow.x || 0;
+		let tmpY = tmpArrow.y || 0;
+		let tmpFirst = tmpArrow.points[0];
+		let tmpLast  = tmpArrow.points[tmpArrow.points.length - 1];
+		let tmpStartX = tmpX + tmpFirst[0];
+		let tmpStartY = tmpY + tmpFirst[1];
+		let tmpEndX   = tmpX + tmpLast[0];
+		let tmpEndY   = tmpY + tmpLast[1];
+
+		let tmpSideA = _inferSide(tmpStartX, tmpStartY, tmpBoxA);
+		let tmpSideB = _inferSide(tmpEndX,   tmpEndY,   tmpBoxB);
+
+		let tmpDX = tmpEndX - tmpStartX;
+		let tmpDY = tmpEndY - tmpStartY;
+		let tmpDist = Math.sqrt(tmpDX * tmpDX + tmpDY * tmpDY);
+		// Stub length: long enough to set a clean perpendicular tangent, short
+		// enough not to overshoot a tight gap -- about a quarter of the span,
+		// clamped (mirrors PathGenerator's modest fixed departure distance).
+		let tmpStub = Math.max(8, Math.min(26, tmpDist * 0.25));
+
+		let tmpAbs =
+		[
+			{ x: tmpStartX,                          y: tmpStartY },
+			{ x: tmpStartX + tmpSideA.dx * tmpStub,  y: tmpStartY + tmpSideA.dy * tmpStub },
+			{ x: tmpEndX   + tmpSideB.dx * tmpStub,  y: tmpEndY   + tmpSideB.dy * tmpStub },
+			{ x: tmpEndX,                            y: tmpEndY }
+		];
+
+		let tmpMinX = Infinity, tmpMinY = Infinity, tmpMaxX = -Infinity, tmpMaxY = -Infinity;
+		for (let p = 0; p < tmpAbs.length; p++)
+		{
+			tmpMinX = Math.min(tmpMinX, tmpAbs[p].x); tmpMaxX = Math.max(tmpMaxX, tmpAbs[p].x);
+			tmpMinY = Math.min(tmpMinY, tmpAbs[p].y); tmpMaxY = Math.max(tmpMaxY, tmpAbs[p].y);
+		}
+		// Re-anchor at the (unchanged) start point; express the rest relative.
+		tmpArrow.x = tmpStartX;
+		tmpArrow.y = tmpStartY;
+		tmpArrow.points = tmpAbs.map((pt) => [ pt.x - tmpStartX, pt.y - tmpStartY ]);
+		tmpArrow.width  = tmpMaxX - tmpMinX;
+		tmpArrow.height = tmpMaxY - tmpMinY;
+		// Smooth (Catmull-Rom) curve through the four points: perpendicular
+		// tangents at both ends, a gentle bow between -- no dagre swoop.
+		tmpArrow.roundness = { type: 2 };
+	}
+
+	return pElements;
+}
+
 module.exports =
 {
 	restyleElements: restyleElements,
 	applyEmphasis:   applyEmphasis,
 	reflowText:      reflowText,
+	rerouteArrows:   rerouteArrows,
 	buildIdLabelMap: buildIdLabelMap,
 	seedFor:         seedFor,
 	fontFamilyIndex: fontFamilyIndex
