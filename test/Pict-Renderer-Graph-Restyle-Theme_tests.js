@@ -197,6 +197,24 @@ suite('PictRendererGraph — text re-flow (repair mermaid wrap)', function ()
 		Expect(tmpLines.length).to.be.at.most(3);                           // fits the box (no extra lines)
 	});
 
+	test('repairs a character-broken hyphenated label split mid-token', function ()
+	{
+		// mermaid-to-excalidraw ignores the <br/> and character-wraps both the
+		// hyphenated module name and the method, stranding fragments mid-token:
+		// "Fable-" / "Settings" / ".settin" / "gs". The whitespace-insensitive
+		// match must still recognize it and restore the two intended lines.
+		let tmpEls = [ { id: 't1', type: 'text', text: 'Fable-\nSettings\n.settin\ngs' } ];
+		reflowText(tmpEls, 'graph TB\n  settings["Fable-Settings<br/>.settings"]');
+		Expect(tmpEls[0].text).to.equal('Fable-Settings\n.settings');
+	});
+
+	test('keeps a short hyphenated label + method cohesive (Fable-Log / .log)', function ()
+	{
+		let tmpEls = [ { id: 't1', type: 'text', text: 'Fable-\nLog\n.log' } ];
+		reflowText(tmpEls, 'graph TB\n  flog["Fable-Log<br/>.log"]');
+		Expect(tmpEls[0].text).to.equal('Fable-Log\n.log');
+	});
+
 	test('leaves text it cannot match to a label alone', function ()
 	{
 		let tmpEls = [ { id: 't1', type: 'text', text: 'Totally unrelated text' } ];

@@ -280,7 +280,12 @@ function _labelSegmentsMap(pMermaid)
 {
 	let tmpMap = {};
 	if (typeof pMermaid !== 'string') { return tmpMap; }
-	let tmpJoinKey = (s) => String(s == null ? '' : s).replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+	// Match key: strip tags and ALL whitespace. mermaid-to-excalidraw breaks
+	// labels at arbitrary points -- including mid-token (e.g. "Fable-Settings"
+	// rendered as "Fable-\nSettings") -- so collapsing whitespace to a single
+	// space would leave a spurious gap that fails to match the source label.
+	// Removing whitespace entirely makes the key invariant to where it broke.
+	let tmpJoinKey = (s) => String(s == null ? '' : s).replace(/<[^>]+>/g, '').replace(/\s+/g, '').toLowerCase();
 	let tmpToSegments = (pLabel) => pLabel.split(/<br\s*\/?>/i).map((s) => s.replace(/<[^>]+>/g, '').trim()).filter((s) => s.length);
 
 	let tmpQuoted = /[\[\(\{]+\s*"([^"]*)"/g;
@@ -316,13 +321,16 @@ function reflowText(pElements, pMermaid)
 {
 	if (!Array.isArray(pElements)) { return pElements; }
 	let tmpMap = _labelSegmentsMap(pMermaid);
-	let tmpJoinKey = (s) => String(s == null ? '' : s).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+	// Same whitespace-insensitive key as _labelSegmentsMap: the rendered text's
+	// line breaks (wherever mermaid put them, mid-token included) vanish, so it
+	// matches the source label regardless of how badly it was wrapped.
+	let tmpJoinKey = (s) => String(s == null ? '' : s).replace(/<[^>]+>/g, '').replace(/\s+/g, '').toLowerCase();
 
 	for (let i = 0; i < pElements.length; i++)
 	{
 		let tmpEl = pElements[i];
 		if (tmpEl.type !== 'text' || (typeof tmpEl.text !== 'string')) { continue; }
-		let tmpSegments = tmpMap[tmpJoinKey(tmpEl.text.replace(/\n/g, ' '))];
+		let tmpSegments = tmpMap[tmpJoinKey(tmpEl.text)];
 		if (!tmpSegments) { continue; }
 
 		// The widest line mermaid already produced fits the box; wrap to it.
