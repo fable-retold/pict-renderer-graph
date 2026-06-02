@@ -29,6 +29,7 @@ const _Registry =
 	'star':     require('./Diagram-Star.js'),
 	'sequence': require('./Diagram-Sequence.js'),
 	'seqgraph': require('./Diagram-SequenceGraph.js'),
+	'ergraph':  require('./Diagram-ER.js'),
 	'mindmap':  require('./Diagram-MindMap.js'),
 	'datadict': require('./Diagram-DataDictionary.js'),
 	'mermaid':  require('./Diagram-Mermaid.js')
