@@ -34,6 +34,16 @@ function _fontIdx(pProfile)
 	return libGenerate.fontFamilyMap[(pProfile && pProfile.FontFamily) || 'Excalifont'] || 5;
 }
 
+// Multi-line label helpers (mermaid <br/> is converted to newlines upstream).
+function _lines(pText) { return String(pText == null ? '' : pText).split('\n'); }
+function _widestLine(pText)
+{
+	let tmpLines = _lines(pText);
+	let tmpMax = 0;
+	for (let i = 0; i < tmpLines.length; i++) { if (tmpLines[i].length > tmpMax) { tmpMax = tmpLines[i].length; } }
+	return tmpMax;
+}
+
 function _text(pText, pX, pY, pW, pH, pSize, pFont, pColor, pSeed, pExtras)
 {
 	let tmpEx = pExtras || {};
@@ -90,55 +100,84 @@ module.exports =
 			return tmpEmpty;
 		}
 
-		// Lane geometry: each actor box sized to its label; lanes evenly spaced.
+		// Lane geometry: each actor box sized to its (possibly multi-line) label
+		// -- width from the widest line; all boxes share the tallest height so
+		// their bottoms align and the lifelines start flush.
 		let tmpActorW = {};
 		let tmpMaxW = 120;
+		let tmpMaxActorH = _ActorH;
 		for (let i = 0; i < tmpParts.length; i++)
 		{
-			let tmpW = Math.max(110, Math.ceil((tmpParts[i].label || '').length * tmpFS * 0.6 + 28));
+			let tmpLbl = tmpParts[i].label || '';
+			let tmpW = Math.max(110, Math.ceil(_widestLine(tmpLbl) * tmpFS * 0.6 + 28));
 			tmpActorW[tmpParts[i].id] = tmpW;
 			if (tmpW > tmpMaxW) { tmpMaxW = tmpW; }
+			let tmpH = Math.ceil(_lines(tmpLbl).length * tmpFS * 1.25 + 22);
+			if (tmpH > tmpMaxActorH) { tmpMaxActorH = tmpH; }
 		}
 		let tmpLaneSpacing = tmpMaxW + 80;
 		let tmpLaneX = {};
+		let tmpLaneXArr = [];
 		for (let i = 0; i < tmpParts.length; i++)
 		{
 			tmpLaneX[tmpParts[i].id] = _SidePad + i * tmpLaneSpacing + tmpLaneSpacing / 2;
+			tmpLaneXArr[i] = tmpLaneX[tmpParts[i].id];
 		}
 		let tmpLaneIndex = {};
 		for (let i = 0; i < tmpParts.length; i++) { tmpLaneIndex[tmpParts[i].id] = i; }
 
 		// ---- Pass 1: walk events, assign y, collect frames ----
-		let tmpY = _HeaderTop + _ActorH + 24;
+		let tmpY = _HeaderTop + tmpMaxActorH + 24;
 		let tmpStack = [];
 		let tmpMsgs = [];
 		let tmpNotes = [];
 		let tmpFrames = [];
+		let tmpLineH = Math.round(tmpMsgFS * 1.3);
+
+		// Record that a block (and every block enclosing it) involves these lanes,
+		// so its frame can be scoped to just the participants it touches.
+		let tmpTouch = function ()
+		{
+			for (let s = 0; s < tmpStack.length; s++)
+			{
+				for (let a = 0; a < arguments.length; a++)
+				{
+					let tmpLi = arguments[a];
+					if (tmpLi === undefined) { continue; }
+					if (tmpLi < tmpStack[s].minLane) { tmpStack[s].minLane = tmpLi; }
+					if (tmpLi > tmpStack[s].maxLane) { tmpStack[s].maxLane = tmpLi; }
+				}
+			}
+		};
 
 		for (let e = 0; e < tmpParsed.events.length; e++)
 		{
 			let tmpEv = tmpParsed.events[e];
 			if (tmpEv.kind === 'message')
 			{
+				let tmpExtra = Math.max(0, _lines(tmpEv.text).length - 1) * tmpLineH;
+				tmpTouch(tmpLaneIndex[tmpEv.from], tmpLaneIndex[tmpEv.to]);
 				if (tmpEv.self)
 				{
-					tmpMsgs.push({ ev: tmpEv, y: tmpY + _RowH / 2, self: true });
-					tmpY += _RowH + _SelfRowH;
+					tmpMsgs.push({ ev: tmpEv, y: tmpY + tmpExtra + _RowH / 2, self: true });
+					tmpY += tmpExtra + _RowH + _SelfRowH;
 				}
 				else
 				{
-					tmpMsgs.push({ ev: tmpEv, y: tmpY + _RowH / 2, self: false });
-					tmpY += _RowH;
+					tmpMsgs.push({ ev: tmpEv, y: tmpY + tmpExtra + _RowH / 2, self: false });
+					tmpY += tmpExtra + _RowH;
 				}
 			}
 			else if (tmpEv.kind === 'note')
 			{
-				tmpNotes.push({ ev: tmpEv, y: tmpY + 6 });
-				tmpY += _NoteH + 14;
+				let tmpNH = Math.max(_NoteH, Math.ceil(_lines(tmpEv.text).length * tmpLineH + 18));
+				tmpNotes.push({ ev: tmpEv, y: tmpY + 6, h: tmpNH });
+				for (let a = 0; a < tmpEv.actors.length; a++) { tmpTouch(tmpLaneIndex[tmpEv.actors[a]]); }
+				tmpY += tmpNH + 14;
 			}
 			else if (tmpEv.kind === 'block')
 			{
-				tmpStack.push({ op: tmpEv.op, label: tmpEv.label, startY: tmpY, depth: tmpStack.length, dividers: [] });
+				tmpStack.push({ op: tmpEv.op, label: tmpEv.label, startY: tmpY, depth: tmpStack.length, dividers: [], minLane: Infinity, maxLane: -Infinity });
 				tmpY += _BlockTopPad;
 			}
 			else if (tmpEv.kind === 'else')
@@ -156,6 +195,7 @@ module.exports =
 				{
 					tmpFrames.push({
 						op: tmpBlock.op, label: tmpBlock.label, depth: tmpBlock.depth,
+						minLane: tmpBlock.minLane, maxLane: tmpBlock.maxLane,
 						top: tmpBlock.startY, bottom: tmpY, dividers: tmpBlock.dividers
 					});
 					tmpY += _BlockBotPad;
@@ -178,7 +218,7 @@ module.exports =
 		for (let i = 0; i < tmpParts.length; i++)
 		{
 			let tmpCX = tmpLaneX[tmpParts[i].id];
-			let tmpTopY = _HeaderTop + _ActorH;
+			let tmpTopY = _HeaderTop + tmpMaxActorH;
 			tmpEls.push({
 				id: 'seq-life-' + tmpParts[i].id, type: 'line',
 				x: tmpCX, y: tmpTopY, width: 0, height: tmpFloor - tmpTopY, angle: 0,
@@ -198,9 +238,24 @@ module.exports =
 		for (let f = 0; f < tmpFrames.length; f++)
 		{
 			let tmpFr = tmpFrames[f];
-			let tmpInset = 14 + tmpFr.depth * 12;
-			let tmpX = _SidePad + tmpInset;
-			let tmpW = (tmpParts.length * tmpLaneSpacing) - tmpInset * 2;
+			let tmpX, tmpW;
+			if (isFinite(tmpFr.minLane) && tmpFr.maxLane >= 0)
+			{
+				// Scope the frame to the lanes it actually touches; inset deeper
+				// frames so a nested block sits inside its parent.
+				let tmpPad = Math.max(12, 30 - tmpFr.depth * 8);
+				let tmpLeft  = tmpLaneXArr[tmpFr.minLane] - tmpPad;
+				let tmpRight = tmpLaneXArr[tmpFr.maxLane] + tmpPad;
+				tmpX = tmpLeft;
+				tmpW = tmpRight - tmpLeft;
+			}
+			else
+			{
+				// Empty block -- fall back to the full width.
+				let tmpInset = 14 + tmpFr.depth * 12;
+				tmpX = _SidePad + tmpInset;
+				tmpW = (tmpParts.length * tmpLaneSpacing) - tmpInset * 2;
+			}
 			let tmpSeed = tmpSeedKey('block:' + tmpFr.op + ':' + tmpFr.top);
 			tmpEls.push({
 				id: 'seq-block-' + f, type: 'rectangle',
@@ -250,7 +305,7 @@ module.exports =
 			let tmpSeed = tmpSeedKey('actor:' + tmpP.id);
 			tmpEls.push({
 				id: tmpBoxId, type: 'rectangle',
-				x: tmpX, y: _HeaderTop, width: tmpW, height: _ActorH, angle: 0,
+				x: tmpX, y: _HeaderTop, width: tmpW, height: tmpMaxActorH, angle: 0,
 				strokeColor: tmpInk, backgroundColor: 'transparent', fillStyle: tmpFill,
 				strokeWidth: tmpStrokeW, strokeStyle: 'solid', roughness: tmpRough, opacity: 100,
 				groupIds: [], frameId: null, roundness: { type: 3 }, seed: tmpSeed,
@@ -258,7 +313,8 @@ module.exports =
 				boundElements: [ { id: 'seq-actorlabel-' + tmpP.id, type: 'text' } ],
 				updated: 1, link: null, locked: false, index: null
 			});
-			tmpEls.push(_text(tmpP.label, tmpX + 8, _HeaderTop + (_ActorH - tmpFS) / 2, tmpW - 16, tmpFS + 4,
+			let tmpAlblH = Math.ceil(_lines(tmpP.label).length * tmpFS * 1.25);
+			tmpEls.push(_text(tmpP.label, tmpX + 8, _HeaderTop + (tmpMaxActorH - tmpAlblH) / 2, tmpW - 16, tmpAlblH,
 				tmpFS, tmpFont, tmpInk, tmpSeed + 1,
 				{ id: 'seq-actorlabel-' + tmpP.id, containerId: tmpBoxId, textAlign: 'center', verticalAlign: 'middle' }));
 		}
@@ -269,17 +325,19 @@ module.exports =
 			let tmpNote = tmpNotes[n];
 			let tmpActors = tmpNote.ev.actors.map((a) => tmpLaneX[a]).filter((x) => x !== undefined);
 			if (!tmpActors.length) { continue; }
+			let tmpTextW = _widestLine(tmpNote.ev.text) * tmpMsgFS * 0.55 + 24;
+			let tmpNoteH = tmpNote.h;
 			let tmpCx, tmpW;
 			if (tmpNote.ev.placement === 'over')
 			{
 				let tmpMin = Math.min.apply(null, tmpActors), tmpMax = Math.max.apply(null, tmpActors);
 				tmpCx = (tmpMin + tmpMax) / 2;
-				tmpW = Math.max(150, (tmpMax - tmpMin) + 150);
+				tmpW = Math.max(150, (tmpMax - tmpMin) + 150, Math.ceil(tmpTextW));
 			}
 			else
 			{
 				let tmpDir = (tmpNote.ev.placement === 'rightof') ? 1 : -1;
-				tmpW = Math.max(140, tmpNote.ev.text.length * tmpMsgFS * 0.55 + 24);
+				tmpW = Math.max(140, Math.ceil(tmpTextW));
 				tmpCx = tmpActors[0] + tmpDir * (tmpW / 2 + 14);
 			}
 			let tmpNX = tmpCx - tmpW / 2;
@@ -287,15 +345,15 @@ module.exports =
 			let tmpSeed = tmpSeedKey('note:' + n);
 			tmpEls.push({
 				id: tmpNoteId, type: 'rectangle',
-				x: tmpNX, y: tmpNote.y, width: tmpW, height: _NoteH, angle: 0,
-				strokeColor: tmpInk, backgroundColor: tmpHi, fillStyle: tmpFill,
+				x: tmpNX, y: tmpNote.y, width: tmpW, height: tmpNoteH, angle: 0,
+				strokeColor: tmpInk, backgroundColor: tmpHi, fillStyle: 'solid',
 				strokeWidth: Math.max(1, tmpStrokeW * 0.8), strokeStyle: 'solid', roughness: tmpRough,
-				opacity: 100, groupIds: [], frameId: null, roundness: { type: 3 }, seed: tmpSeed,
+				opacity: 55, groupIds: [], frameId: null, roundness: { type: 3 }, seed: tmpSeed,
 				version: 1, versionNonce: tmpSeed, isDeleted: false,
 				boundElements: [ { id: 'seq-notelabel-' + n, type: 'text' } ],
 				updated: 1, link: null, locked: false, index: null
 			});
-			tmpEls.push(_text(tmpNote.ev.text, tmpNX + 8, tmpNote.y + 6, tmpW - 16, _NoteH - 12,
+			tmpEls.push(_text(tmpNote.ev.text, tmpNX + 8, tmpNote.y + 6, tmpW - 16, tmpNoteH - 12,
 				tmpMsgFS, tmpFont, tmpInk, tmpSeed + 1,
 				{ id: 'seq-notelabel-' + n, containerId: tmpNoteId, textAlign: 'center', verticalAlign: 'middle' }));
 		}
@@ -328,7 +386,8 @@ module.exports =
 				});
 				if (tmpEv.text)
 				{
-					tmpEls.push(_text(tmpEv.text, tmpX + tmpLoopW + 10, tmpM.y + tmpLoopH / 2 - 10, Math.max(80, tmpEv.text.length * tmpMsgFS * 0.6), 18,
+					let tmpSlblH = _lines(tmpEv.text).length * tmpLineH;
+					tmpEls.push(_text(tmpEv.text, tmpX + tmpLoopW + 10, tmpM.y + tmpLoopH / 2 - tmpSlblH / 2, Math.max(80, _widestLine(tmpEv.text) * tmpMsgFS * 0.6), tmpSlblH,
 						tmpMsgFS, tmpFont, tmpColor, tmpSeed + 1, { id: 'seq-msglabel-' + m }));
 				}
 				continue;
@@ -355,8 +414,9 @@ module.exports =
 			if (tmpEv.text)
 			{
 				let tmpMidX = (tmpSX + tmpEX) / 2;
-				let tmpLW = Math.max(60, tmpEv.text.length * tmpMsgFS * 0.6);
-				tmpEls.push(_text(tmpEv.text, tmpMidX - tmpLW / 2, tmpM.y - 22, tmpLW, 18,
+				let tmpLW = Math.max(60, _widestLine(tmpEv.text) * tmpMsgFS * 0.6);
+				let tmpMlblH = _lines(tmpEv.text).length * tmpLineH;
+				tmpEls.push(_text(tmpEv.text, tmpMidX - tmpLW / 2, tmpM.y - tmpMlblH - 6, tmpLW, tmpMlblH,
 					tmpMsgFS, tmpFont, tmpColor, tmpSeed + 1, { id: 'seq-msglabel-' + m, textAlign: 'center' }));
 			}
 		}

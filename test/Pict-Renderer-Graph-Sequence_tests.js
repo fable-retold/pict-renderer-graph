@@ -48,6 +48,14 @@ suite('PictRendererGraph — mermaid sequence parser', function ()
 		Expect(tmpNotes[1]).to.include({ placement: 'rightof', text: 'side' });
 	});
 
+	test('converts <br/> to newlines in participant, message and note labels', function ()
+	{
+		let tmpModel = parseMermaidSequence('sequenceDiagram\n  participant A as Svc<br/>(remote)\n  A->>B: line one<br/>line two\n  Note over A: note one<br>note two');
+		Expect(tmpModel.participants[0].label).to.equal('Svc\n(remote)');
+		Expect(tmpModel.events.find((e) => e.kind === 'message').text).to.equal('line one\nline two');
+		Expect(tmpModel.events.find((e) => e.kind === 'note').text).to.equal('note one\nnote two');
+	});
+
 	test('emits ordered block / else / end events, including nesting', function ()
 	{
 		let tmpSrc = 'sequenceDiagram\n' +
@@ -97,5 +105,24 @@ suite('PictRendererGraph — seqgraph handler (mermaid -> scene)', function ()
 		let tmpDivider = tmpScene.elements.find((e) => e.type === 'line' && /^seq-divider-/.test(e.id));
 		Expect(tmpDivider).to.not.equal(undefined);
 		Expect(tmpDivider.strokeStyle).to.equal('dashed');
+	});
+
+	test('sizes actor boxes taller for multi-line (<br/>) participant labels', function ()
+	{
+		let tmpSingle = libSeq.toScene({ type: 'seqgraph', mermaid: 'sequenceDiagram\n  A->>B: x' }, Profile, null);
+		let tmpMulti  = libSeq.toScene({ type: 'seqgraph', mermaid: 'sequenceDiagram\n  participant A as One<br/>Two<br/>Three\n  A->>B: x' }, Profile, null);
+		let tmpHSingle = tmpSingle.elements.find((e) => e.id === 'seq-actor-A').height;
+		let tmpHMulti  = tmpMulti.elements.find((e) => e.id === 'seq-actor-A').height;
+		Expect(tmpHMulti).to.be.greaterThan(tmpHSingle);
+	});
+
+	test('scopes a block frame to the lanes it touches, not the full width', function ()
+	{
+		// The loop only contains A->>B, so its frame must not stretch to C's lane.
+		let tmpScene = libSeq.toScene({ type: 'seqgraph', mermaid: 'sequenceDiagram\n  participant A\n  participant B\n  participant C\n  A->>C: setup\n  loop retry\n    A->>B: ping\n  end' }, Profile, null);
+		let tmpFrame = tmpScene.elements.find((e) => /^seq-block-/.test(e.id || ''));
+		let tmpLaneC = tmpScene.elements.find((e) => e.id === 'seq-actor-C');
+		Expect(tmpFrame).to.not.equal(undefined);
+		Expect(tmpFrame.x + tmpFrame.width).to.be.lessThan(tmpLaneC.x);
 	});
 });

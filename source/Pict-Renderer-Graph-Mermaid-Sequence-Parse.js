@@ -42,6 +42,17 @@ const _Arrows =
 
 const _BlockOps = { loop: 1, alt: 1, opt: 1, par: 1, critical: 1, break: 1, rect: 1 };
 
+// Normalize a label's <br/> line breaks to real newlines -- mermaid uses <br/>
+// inside participant / message / note labels for multi-line text -- trimming
+// each resulting line so the renderer can size and wrap to the longest line.
+function _unbr(pText)
+{
+	return String(pText == null ? '' : pText)
+		.replace(/<br\s*\/?>/gi, '\n')
+		.split('\n').map((s) => s.trim()).join('\n')
+		.trim();
+}
+
 function parseMermaidSequence(pSource)
 {
 	let tmpLines = String(pSource == null ? '' : pSource).split('\n');
@@ -55,14 +66,15 @@ function parseMermaidSequence(pSource)
 	{
 		let tmpId = String(pId).trim();
 		if (!tmpId) { return; }
+		let tmpLabel = _unbr(pLabel);
 		if (!tmpParticipants[tmpId])
 		{
-			tmpParticipants[tmpId] = { id: tmpId, label: (pLabel != null && String(pLabel).trim()) ? String(pLabel).trim() : tmpId };
+			tmpParticipants[tmpId] = { id: tmpId, label: tmpLabel || tmpId };
 			tmpOrder.push(tmpId);
 		}
-		else if (pLabel != null && String(pLabel).trim())
+		else if (tmpLabel)
 		{
-			tmpParticipants[tmpId].label = String(pLabel).trim();
+			tmpParticipants[tmpId].label = tmpLabel;
 		}
 	};
 
@@ -74,7 +86,7 @@ function parseMermaidSequence(pSource)
 		if (/^autonumber\b/i.test(tmpLine)) { continue; }
 
 		let tmpTitleM = tmpLine.match(/^title\s+(.+)$/i);
-		if (tmpTitleM) { tmpTitle = tmpTitleM[1].trim(); continue; }
+		if (tmpTitleM) { tmpTitle = _unbr(tmpTitleM[1]); continue; }
 
 		// participant X as Label  /  participant X  (actor is the same to us)
 		let tmpPart = tmpLine.match(/^(?:participant|actor)\s+(.+)$/i);
@@ -96,7 +108,7 @@ function parseMermaidSequence(pSource)
 			let tmpPlacement = tmpNote[1].toLowerCase().replace(/\s+/g, '');   // rightof | leftof | over
 			let tmpActors = tmpNote[2].split(',').map((s) => s.trim()).filter((s) => s.length);
 			for (let a = 0; a < tmpActors.length; a++) { tmpDeclare(tmpActors[a], null); }
-			tmpEvents.push({ kind: 'note', placement: tmpPlacement, actors: tmpActors, text: tmpNote[3].trim() });
+			tmpEvents.push({ kind: 'note', placement: tmpPlacement, actors: tmpActors, text: _unbr(tmpNote[3]) });
 			continue;
 		}
 
@@ -147,7 +159,7 @@ function _parseMessage(pLine)
 		if (!/^[A-Za-z0-9_]+$/.test(tmpLeft)) { continue; }
 		let tmpColon = tmpRight.indexOf(':');
 		let tmpTo   = (tmpColon >= 0 ? tmpRight.slice(0, tmpColon) : tmpRight).trim();
-		let tmpText = (tmpColon >= 0 ? tmpRight.slice(tmpColon + 1) : '').trim();
+		let tmpText = _unbr(tmpColon >= 0 ? tmpRight.slice(tmpColon + 1) : '');
 		// Strip mermaid activation markers (+/-) on the target.
 		tmpTo = tmpTo.replace(/^[+-]/, '').trim();
 		if (!/^[A-Za-z0-9_]+$/.test(tmpTo)) { continue; }
