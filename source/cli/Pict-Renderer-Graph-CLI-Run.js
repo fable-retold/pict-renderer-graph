@@ -356,8 +356,11 @@ function buildOne(pRenderer, pMmdPath, pArgs, fCallback)
 	let tmpIsFlowchart = /^\s*(?:graph|flowchart)\b/m.test(tmpSource);
 	let tmpIsSequence  = /^\s*sequenceDiagram\b/m.test(tmpSource);
 	let tmpIsER        = /^\s*erDiagram\b/m.test(tmpSource);
+	// A tree sidecar carries box-drawing branch connectors instead of a mermaid
+	// header (the .mmd extension is just "diagram source", whatever the dialect).
+	let tmpIsTree      = !tmpIsFlowchart && !tmpIsSequence && !tmpIsER && /^[ \t│]*[├└][─-]+/m.test(tmpSource);
 	let tmpRenderer = tmpHints.renderer ||
-		(tmpIsFlowchart ? 'flowgraph' : tmpIsSequence ? 'seqgraph' : tmpIsER ? 'ergraph' : 'mermaid');
+		(tmpIsFlowchart ? 'flowgraph' : tmpIsSequence ? 'seqgraph' : tmpIsER ? 'ergraph' : tmpIsTree ? 'filetree' : 'mermaid');
 
 	let tmpGraph =
 	{
@@ -462,7 +465,9 @@ function findMarkdownFiles(pPath)
 	{
 		for (let tmpEntry of libFs.readdirSync(pDir, { withFileTypes: true }))
 		{
-			if (tmpEntry.name === 'node_modules' || tmpEntry.name === 'dist' || tmpEntry.name === 'diagrams' || tmpEntry.name.startsWith('.')) { continue; }
+			// Skip build/output + generated dirs, and vendored third-party trees
+			// (e.g. a mirrored upstream repo) -- we don't rewrite code we don't own.
+			if (tmpEntry.name === 'node_modules' || tmpEntry.name === 'dist' || tmpEntry.name === 'diagrams' || tmpEntry.name === 'vendor' || tmpEntry.name.startsWith('.')) { continue; }
 			let tmpFull = libPath.join(pDir, tmpEntry.name);
 			if (tmpEntry.isDirectory()) { walk(tmpFull); }
 			else if (tmpEntry.name.endsWith('.md')) { tmpOut.push(tmpFull); }
@@ -521,7 +526,8 @@ function cmdConvert(pArgs)
 		try { tmpText = libFs.readFileSync(tmpMdPath, 'utf8'); }
 		catch (pErr) { continue; }
 		let tmpFences = libConvert.extractMermaidFences(tmpText);
-		if (!tmpFences.length) { continue; }
+		let tmpTrees  = (pArgs.flags.trees !== false) ? libConvert.extractTreeBlocks(tmpText) : [];
+		if (!tmpFences.length && !tmpTrees.length) { continue; }
 		let tmpDir = libPath.dirname(tmpMdPath);
 		let tmpDiagramsDir = libPath.join(tmpDir, 'diagrams');
 		if (!tmpUsedByDir[tmpDiagramsDir]) { tmpUsedByDir[tmpDiagramsDir] = _existingDiagramNames(tmpDiagramsDir); }
@@ -537,6 +543,15 @@ function cmdConvert(pArgs)
 			}
 			let tmpName = libConvert.deriveDiagramName(tmpFence.heading, tmpUsed, tmpBase, i);
 			tmpJobs.push({ mdPath: tmpMdPath, dir: tmpDir, diagramsDir: tmpDiagramsDir, fence: tmpFence, name: tmpName, alt: tmpFence.heading, type: tmpFence.class.type, bucket: tmpFence.class.bucket });
+			tmpFilesTouched[tmpMdPath] = true;
+		}
+		// Directory-tree blocks (plain ``` fences, not mermaid) -> the filetree
+		// renderer.  Named + de-duped from the same diagrams/ pool as the fences.
+		for (let i = 0; i < tmpTrees.length; i++)
+		{
+			let tmpTree = tmpTrees[i];
+			let tmpName = libConvert.deriveDiagramName(tmpTree.heading, tmpUsed, tmpBase, tmpFences.length + i);
+			tmpJobs.push({ mdPath: tmpMdPath, dir: tmpDir, diagramsDir: tmpDiagramsDir, fence: tmpTree, name: tmpName, alt: tmpTree.heading, type: 'filetree', bucket: 'tree' });
 			tmpFilesTouched[tmpMdPath] = true;
 		}
 	}

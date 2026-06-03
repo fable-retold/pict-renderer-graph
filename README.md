@@ -298,25 +298,8 @@ diagram everyone has seen 100 times?"
 
 ## Architecture
 
-```
-modules/pict/pict-renderer-graph/
-├── source/
-│   ├── Pict-Renderer-Graph.js              # main fable service
-│   ├── browser/Pict-Renderer-Graph-Browser.js   # pre-warmed Chromium lifecycle
-│   ├── diagrams/                            # one file per diagram type
-│   │   ├── Diagram-Registry.js
-│   │   ├── Diagram-Flow.js                  # delegates to pict-section-excalidraw
-│   │   ├── Diagram-Star.js
-│   │   ├── Diagram-Sequence.js
-│   │   ├── Diagram-MindMap.js
-│   │   ├── Diagram-DataDictionary.js
-│   │   └── Diagram-Mermaid.js               # async, runs in-page
-│   ├── styles/                              # style profiles
-│   ├── cli/Pict-Renderer-Graph-CLI-Run.js   # CLI entry
-│   └── server/Pict-Renderer-Graph-Routes.js # Orator route registration
-├── test/                                     # mocha + puppeteer e2e
-└── example_applications/renderer_service/    # standalone Orator app
-```
+<!-- bespoke diagram: edit diagrams/architecture.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-renderer-graph -->
+![Architecture](diagrams/architecture.svg)
 
 See [the plan](../../../.claude/plans/okay-this-is-beautiful-jazzy-flame.md) for the full design rationale.
 

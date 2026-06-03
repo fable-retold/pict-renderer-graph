@@ -67,6 +67,53 @@ function extractMermaidFences(pMarkdown)
 	return tmpFences;
 }
 
+// A fenced block is a directory tree (not a box diagram / table / code) when it
+// has at least two box-drawing branch connectors (├── / └──) and NO box top
+// corners (┌ ┐ ╔ ╗ — those mark a drawn box or wireframe, never a tree).  This
+// is the same discriminator the ASCII audit used to separate the 96 trees from
+// the box-art, so it routes exactly the tree blocks to the filetree renderer.
+function _looksLikeTree(pBody)
+{
+	let tmpLines = String(pBody == null ? '' : pBody).replace(/\r/g, '').split('\n');
+	let tmpConnectors = 0;
+	for (let i = 0; i < tmpLines.length; i++)
+	{
+		if (/[┌┐╔╗]/.test(tmpLines[i])) { return false; }
+		if (/^[ \t│]*[├└][─-]+/.test(tmpLines[i])) { tmpConnectors++; }
+	}
+	return tmpConnectors >= 2;
+}
+
+// Find every fenced code block that is a directory tree (any language tag except
+// `mermaid`, which the mermaid path owns), with its span, indentation, body, and
+// nearest heading -- the same record shape extractMermaidFences returns, so the
+// CLI can plan tree jobs alongside diagram jobs.
+function extractTreeBlocks(pMarkdown)
+{
+	let tmpText = String(pMarkdown == null ? '' : pMarkdown);
+	let tmpBlocks = [];
+	let tmpFenceRe = /(^|\n)([ \t]*)```([^\n]*)\n([\s\S]*?)```/g;
+	let tmpMatch;
+	while ((tmpMatch = tmpFenceRe.exec(tmpText)))
+	{
+		let tmpLang = (tmpMatch[3] || '').trim().toLowerCase();
+		if (tmpLang === 'mermaid') { continue; }
+		let tmpBody = tmpMatch[4];
+		if (!_looksLikeTree(tmpBody)) { continue; }
+		let tmpLead   = tmpMatch[1];
+		let tmpStart  = tmpMatch.index + tmpLead.length;
+		tmpBlocks.push(
+		{
+			start:   tmpStart,
+			end:     tmpFenceRe.lastIndex,
+			indent:  tmpMatch[2] || '',
+			body:    tmpBody,
+			heading: _nearestHeading(tmpText.slice(0, tmpStart))
+		});
+	}
+	return tmpBlocks;
+}
+
 // The last markdown ATX heading before an offset, or null.
 function _nearestHeading(pBefore)
 {
@@ -135,6 +182,7 @@ module.exports =
 {
 	classifyMermaid:      classifyMermaid,
 	extractMermaidFences: extractMermaidFences,
+	extractTreeBlocks:    extractTreeBlocks,
 	slugify:              slugify,
 	deriveDiagramName:    deriveDiagramName,
 	buildImageReference:  buildImageReference,

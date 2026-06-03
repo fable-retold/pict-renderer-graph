@@ -60,7 +60,8 @@ const _DEFAULT_DISK_DIR_NAME = 'pict-renderer-graph';
 // unchanged input (the package version covers released upgrades; the constant
 // covers in-development iterations between publishes).
 const _PACKAGE_VERSION          = (() => { try { return require('../../package.json').version; } catch (pErr) { return '0'; } })();
-const _RENDER_ALGORITHM_VERSION = 2;   // 2: bezier-sampled, port-distributed edge routing
+const _RENDER_ALGORITHM_VERSION = 3;   // 3: entity-decoded flow labels + native filetree renderer
+                                       // 2: bezier-sampled, port-distributed edge routing
 
 class PictRendererGraphCache
 {
